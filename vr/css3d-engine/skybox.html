@@ -2,35 +2,38 @@
   <head></head>
   <body>
     <div id="container"></div>
-    <script src="./css3d-engine.min.js"></script>
+    <script src="./index.min.js"></script>
     <script>
-      window.onload = initCSS3D;
-
-      function initCSS3D() {
+      window.onload = function initCSS3D() {
+        // 创建场景
         var s = new C3D.Stage();
+        // 设置场景布局：宽高
         s.size(window.innerWidth, window.innerHeight).update();
+        // 挂载元素
         document.getElementById('container').appendChild(s.el);
 
-        var box = new C3D.Skybox();
-        box.size(954).position(0, 0, 0).material({
+        // 创建单独控制立方体各面素材的Box立方体容器
+        var skybox = new C3D.Skybox();
+        // 设置容器大小、旋转中心点、容器各个面的素材
+        skybox.size(954).position(0, 0, 0).material({
           front: { image: "images/screen.jpeg" },
           back: { image: "images/screen.jpeg" },
           left: { image: "images/screen.jpeg" },
           right: { image: "images/screen.jpeg" },
           up: { image: "images/screen.jpeg" },
           down: { image: "images/screen.jpeg" },
-
         }).update();
-        s.addChild(box);
+        s.addChild(skybox);
 
+        // 设置摄像机角度
         function loop() {
           angleX += (curMouseX - lastMouseX + lastAngleX - angleX) * 0.3;
           angleY += (curMouseY - lastMouseY + lastAngleY - angleY) * 0.3;
 
+          // 设置摄像机视角的旋转角度
           s.camera.rotation(angleY, -angleX, 0).updateT();
           requestAnimationFrame(loop);
         }
-
         loop();
 
         var lastMouseX = 0;
@@ -42,6 +45,7 @@
         var angleX = 0;
         var angleY = 0;
 
+        // 触碰滑动事件，计算视角的旋转
         document.addEventListener("mousedown", mouseDownHandler);
         document.addEventListener("mouseup", mouseUpHandler);
 
@@ -66,6 +70,7 @@
           document.removeEventListener("mousemove", mouseMoveHandler);
         }
 
+        // 设置页面内焦点
         function initPoints() {
           var hotPoints = [
             {
