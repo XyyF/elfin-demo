@@ -2,7 +2,7 @@
   <head></head>
   <body>
     <div id="container"></div>
-    <script src="./css3d-engine.js"></script>
+    <script src="./css3d-engine.min.js"></script>
     <script>
       window.onload = initCSS3D;
 
@@ -65,6 +65,49 @@
 
           document.removeEventListener("mousemove", mouseMoveHandler);
         }
+
+        function initPoints() {
+          var hotPoints = [
+            {
+              position: {
+                x: 0,
+                y: 0,
+                z: -476
+              },
+              detail: {
+                "title": "信息点1"
+              }
+            },
+            {
+              position: {
+                x: 0,
+                y: 0,
+                z: 476
+              },
+              detail: {
+                "title": "信息点2"
+              }
+            }
+          ];
+          var poiObjects = [];
+          for (var i = 0; i < hotPoints.length; i++) {
+            var _p = new C3D.Plane();
+
+            _p.size(207, 162).position(hotPoints[i].position.x, hotPoints[i].position.y, hotPoints[i].position.z).material({
+              image: "images/hot.jpeg",
+              repeat: 'no-repeat',
+              bothsides: true,//注意这个两面贴图的属性
+            }).update();
+            s.addChild(_p);
+
+            _p.el.detail = hotPoints[i].detail;
+
+            _p.on("click", function (e) {
+              console.log(e.target.detail.title);
+            })
+          }
+        }
+        initPoints();
       }
     </script>
   </body>
