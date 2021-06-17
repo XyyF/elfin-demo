@@ -1,0 +1,71 @@
+<html>
+  <head></head>
+  <body>
+    <div id="container"></div>
+    <script src="./css3d-engine.js"></script>
+    <script>
+      window.onload = initCSS3D;
+
+      function initCSS3D() {
+        var s = new C3D.Stage();
+        s.size(window.innerWidth, window.innerHeight).update();
+        document.getElementById('container').appendChild(s.el);
+
+        var box = new C3D.Skybox();
+        box.size(954).position(0, 0, 0).material({
+          front: { image: "images/screen.jpeg" },
+          back: { image: "images/screen.jpeg" },
+          left: { image: "images/screen.jpeg" },
+          right: { image: "images/screen.jpeg" },
+          up: { image: "images/screen.jpeg" },
+          down: { image: "images/screen.jpeg" },
+
+        }).update();
+        s.addChild(box);
+
+        function loop() {
+          angleX += (curMouseX - lastMouseX + lastAngleX - angleX) * 0.3;
+          angleY += (curMouseY - lastMouseY + lastAngleY - angleY) * 0.3;
+
+          s.camera.rotation(angleY, -angleX, 0).updateT();
+          requestAnimationFrame(loop);
+        }
+
+        loop();
+
+        var lastMouseX = 0;
+        var lastMouseY = 0;
+        var curMouseX = 0;
+        var curMouseY = 0;
+        var lastAngleX = 0;
+        var lastAngleY = 0;
+        var angleX = 0;
+        var angleY = 0;
+
+        document.addEventListener("mousedown", mouseDownHandler);
+        document.addEventListener("mouseup", mouseUpHandler);
+
+        function mouseDownHandler(evt) {
+          lastMouseX = curMouseX = evt.pageX;
+          lastMouseY = curMouseY = evt.pageY;
+          lastAngleX = angleX;
+          lastAngleY = angleY;
+
+          document.addEventListener("mousemove", mouseMoveHandler);
+        }
+
+        function mouseMoveHandler(evt) {
+          curMouseX = evt.pageX;
+          curMouseY = evt.pageY;
+        }
+
+        function mouseUpHandler(evt) {
+          curMouseX = evt.pageX;
+          curMouseY = evt.pageY;
+
+          document.removeEventListener("mousemove", mouseMoveHandler);
+        }
+      }
+    </script>
+  </body>
+</html>
