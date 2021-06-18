@@ -16,12 +16,12 @@
         var skybox = new C3D.Skybox();
         // 设置容器大小、旋转中心点、容器各个面的素材
         skybox.size(954).position(0, 0, 0).material({
-          front: { image: "images/front.jpg" },
-          back: { image: "images/back.jpg" },
-          left: { image: "images/left.jpg" },
-          right: { image: "images/right.jpg" },
-          up: { image: "images/up.jpg" },
-          down: { image: "images/down.jpg" },
+          front: { image: "images/front.jpg", size: '100% 100%' },
+          back: { image: "images/back.jpg", size: '100% 100%' },
+          left: { image: "images/left.jpg", size: '100% 100%' },
+          right: { image: "images/right.jpg", size: '100% 100%' },
+          up: { image: "images/up.jpg", size: '100% 100%' },
+          down: { image: "images/down.jpg", size: '100% 100%' },
         }).update();
         s.addChild(skybox);
 
@@ -70,49 +70,50 @@
           document.removeEventListener("mousemove", mouseMoveHandler);
         }
 
-        // 设置页面内焦点
+        // 设置页面内热点
+        initPoints();
         function initPoints() {
+          // 热点方位
           var hotPoints = [
             {
               position: {
-                x: 0,
+                x: 300,
                 y: 0,
-                z: -476
+                z: -476,
               },
               detail: {
-                "title": "信息点1"
-              }
+                "title": "信息点1",
+              },
             },
             {
               position: {
-                x: 0,
+                x: 300,
                 y: 0,
-                z: 476
+                z: 476,
               },
               detail: {
-                "title": "信息点2"
-              }
-            }
+                "title": "信息点2",
+              },
+            },
           ];
-          var poiObjects = [];
           for (var i = 0; i < hotPoints.length; i++) {
+            // 创建一个平面场景
             var _p = new C3D.Plane();
 
-            _p.size(207, 162).position(hotPoints[i].position.x, hotPoints[i].position.y, hotPoints[i].position.z).material({
-              image: "images/hot.jpeg",
+            _p.size(200, 200).position(hotPoints[i].position.x, hotPoints[i].position.y, hotPoints[i].position.z).material({
+              image: "images/hot.png",
+              size: '100% 100%',
               repeat: 'no-repeat',
-              bothsides: true,//注意这个两面贴图的属性
+              bothsides: true, // 注意这个两面贴图的属性
             }).update();
             s.addChild(_p);
 
             _p.el.detail = hotPoints[i].detail;
-
-            _p.on("click", function (e) {
-              console.log(e.target.detail.title);
-            })
+            _p.on('click', function (e) {
+              window.alert(`点击热点区域: ${e.target.detail.title}`);
+            });
           }
         }
-        // initPoints();
       }
     </script>
   </body>

@@ -326,11 +326,9 @@
             this.el.style[prefix + 'BackfaceVisibility'] = this.__mat[i] ? 'visible' : 'hidden';
             break;
           case 'image':
-            this.el.style['background-size'] = '100% 100%';
             this.el.style['background' + firstUper(i)] = this.__mat[i] !== '' ? ('url(' + this.__mat[i] + ')') : '';
             break;
           default:
-            this.el.style['background-size'] = '100% 100%';
             this.el.style['background' + firstUper(i)] = this.__mat[i];
             break;
         }
