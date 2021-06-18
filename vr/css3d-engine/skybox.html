@@ -16,12 +16,12 @@
         var skybox = new C3D.Skybox();
         // 设置容器大小、旋转中心点、容器各个面的素材
         skybox.size(954).position(0, 0, 0).material({
-          front: { image: "images/screen.jpeg" },
-          back: { image: "images/screen.jpeg" },
-          left: { image: "images/screen.jpeg" },
-          right: { image: "images/screen.jpeg" },
-          up: { image: "images/screen.jpeg" },
-          down: { image: "images/screen.jpeg" },
+          front: { image: "images/front.jpg" },
+          back: { image: "images/back.jpg" },
+          left: { image: "images/left.jpg" },
+          right: { image: "images/right.jpg" },
+          up: { image: "images/up.jpg" },
+          down: { image: "images/down.jpg" },
         }).update();
         s.addChild(skybox);
 
@@ -112,7 +112,7 @@
             })
           }
         }
-        initPoints();
+        // initPoints();
       }
     </script>
   </body>
