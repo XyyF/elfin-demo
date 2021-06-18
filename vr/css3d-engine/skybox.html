@@ -6,14 +6,14 @@
     <script>
       window.onload = function initCSS3D() {
         // 创建场景
-        var s = new C3D.Stage();
+        const stage = new C3D.Stage();
         // 设置场景布局：宽高
-        s.size(window.innerWidth, window.innerHeight).update();
+        stage.size(window.innerWidth, window.innerHeight).update();
         // 挂载元素
-        document.getElementById('container').appendChild(s.el);
+        document.getElementById('container').appendChild(stage.el);
 
         // 创建单独控制立方体各面素材的Box立方体容器
-        var skybox = new C3D.Skybox();
+        const skybox = new C3D.Skybox();
         // 设置容器大小、旋转中心点、容器各个面的素材
         skybox.size(954).position(0, 0, 0).material({
           front: { image: "images/front.jpg", size: '100% 100%' },
@@ -23,31 +23,41 @@
           up: { image: "images/up.jpg", size: '100% 100%' },
           down: { image: "images/down.jpg", size: '100% 100%' },
         }).update();
-        s.addChild(skybox);
+        stage.addChild(skybox);
 
+        // 设置摄像头角度
+        initCamera(stage);
+
+        // 设置页面内热点
+        initHotPoint(stage);
+      }
+    </script>
+    <script>
+      // 设置摄像头角度
+      function initCamera(stage) {
+        // 角度信息
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+        let curMouseX = 0;
+        let curMouseY = 0;
+        let lastAngleX = 0;
+        let lastAngleY = 0;
+        let angleX = 0;
+        let angleY = 0;
         // 设置摄像机角度
         function loop() {
           angleX += (curMouseX - lastMouseX + lastAngleX - angleX) * 0.3;
           angleY += (curMouseY - lastMouseY + lastAngleY - angleY) * 0.3;
 
           // 设置摄像机视角的旋转角度
-          s.camera.rotation(angleY, -angleX, 0).updateT();
+          stage.camera.rotation(angleY, -angleX, 0).updateT();
           requestAnimationFrame(loop);
         }
         loop();
 
-        var lastMouseX = 0;
-        var lastMouseY = 0;
-        var curMouseX = 0;
-        var curMouseY = 0;
-        var lastAngleX = 0;
-        var lastAngleY = 0;
-        var angleX = 0;
-        var angleY = 0;
-
         // 触碰滑动事件，计算视角的旋转
-        document.addEventListener("mousedown", mouseDownHandler);
-        document.addEventListener("mouseup", mouseUpHandler);
+        document.addEventListener('mousedown', mouseDownHandler);
+        document.addEventListener('mouseup', mouseUpHandler);
 
         function mouseDownHandler(evt) {
           lastMouseX = curMouseX = evt.pageX;
@@ -55,7 +65,7 @@
           lastAngleX = angleX;
           lastAngleY = angleY;
 
-          document.addEventListener("mousemove", mouseMoveHandler);
+          document.addEventListener('mousemove', mouseMoveHandler);
         }
 
         function mouseMoveHandler(evt) {
@@ -67,54 +77,54 @@
           curMouseX = evt.pageX;
           curMouseY = evt.pageY;
 
-          document.removeEventListener("mousemove", mouseMoveHandler);
-        }
-
-        // 设置页面内热点
-        initPoints();
-        function initPoints() {
-          // 热点方位
-          var hotPoints = [
-            {
-              position: {
-                x: 300,
-                y: 0,
-                z: -476,
-              },
-              detail: {
-                "title": "信息点1",
-              },
-            },
-            {
-              position: {
-                x: 300,
-                y: 0,
-                z: 476,
-              },
-              detail: {
-                "title": "信息点2",
-              },
-            },
-          ];
-          for (var i = 0; i < hotPoints.length; i++) {
-            // 创建一个平面场景
-            var _p = new C3D.Plane();
-
-            _p.size(200, 200).position(hotPoints[i].position.x, hotPoints[i].position.y, hotPoints[i].position.z).material({
-              image: "images/hot.png",
-              size: '100% 100%',
-              repeat: 'no-repeat',
-              bothsides: true, // 注意这个两面贴图的属性
-            }).update();
-            s.addChild(_p);
-
-            _p.el.detail = hotPoints[i].detail;
-            _p.on('click', function (e) {
-              window.alert(`点击热点区域: ${e.target.detail.title}`);
-            });
-          }
+          document.removeEventListener('mousemove', mouseMoveHandler);
         }
       }
+    </script>
+    <script>
+      // 设置页面内热点
+      function initHotPoint(stage) {
+        // 热点方位
+        const hotPoints = [
+          {
+            position: {
+              x: 300,
+              y: 0,
+              z: -476,
+            },
+            detail: {
+              "title": "信息点1",
+            },
+          },
+          {
+            position: {
+              x: 300,
+              y: 0,
+              z: 476,
+            },
+            detail: {
+              "title": "信息点2",
+            },
+          },
+        ];
+        for (let i = 0; i < hotPoints.length; i++) {
+          // 创建一个平面场景
+          const _p = new C3D.Plane();
+
+          _p.size(200, 200).position(hotPoints[i].position.x, hotPoints[i].position.y, hotPoints[i].position.z).material({
+            image: "images/hot.png",
+            size: '100% 100%',
+            repeat: 'no-repeat',
+            bothsides: true, // 注意这个两面贴图的属性
+          }).update();
+          stage.addChild(_p);
+
+          _p.el.detail = hotPoints[i].detail;
+          _p.on('click', function (e) {
+            window.alert(`点击热点区域: ${e.target.detail.title}`);
+          });
+        }
+      };
     </script>
   </body>
 </html>
