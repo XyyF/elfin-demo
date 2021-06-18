@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <script src="./index.min.js"></script>
+  </head>
+  <body>
+    <script>
+      window.onload = function initCSS3d() {
+        //创建场景
+        const stage = new C3D.Stage();
+        stage.size(window.innerWidth, window.innerHeight).material({
+          color: "#cccccc"
+        }).update();
+        document.body.appendChild(stage.el);
+
+        // 初始化三维盒子
+        initSprite(stage);
+      }
+
+      // 初始化三维盒子
+      function initSprite(stage) {
+        //创建一个三维容器（创建以方便分组使用）
+        const sprite = new C3D.Sprite();
+        sprite.position(0, 0, -500).update();
+        stage.addChild(sprite);
+        //创建平面放入场景
+        for (let j = 0; j < 6; j++) {
+          for (let i = 0; i < 9; i++) {
+            const _color = C3D.getRandomColor();
+            // 创建平面
+            const plane = new C3D.Plane();
+            const _x = 50 - 100 + (i % 3) * 100;
+            const _y = 50 - 100 + (i / 3 | 0) * 100;
+            const _z = -150;
+            plane.size(100, 100, 0).origin(_x, _y, _z);
+            switch (j) {
+              case 0:
+                plane.rotation(0, 0, 0).material({
+                  color: _color
+                });
+                break;
+              case 1:
+                plane.rotation(0, 90, 0).material({
+                  color: _color
+                });
+                break;
+              case 2:
+                plane.rotation(0, 180, 0).material({
+                  color: _color
+                });
+                break;
+              case 3:
+                plane.rotation(0, 270, 0).material({
+                  color: _color
+                });
+                break;
+              case 4:
+                plane.rotation(90, 0, 0).material({
+                  color: _color
+                });
+                break;
+              case 5:
+                plane.rotation(-90, 0, 0).material({
+                  color: _color
+                });
+                break;
+            }
+            plane.update();
+            sprite.addChild(plane);
+          }
+        }
+
+        let isMoving = false;
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+        let curMouseX = 0;
+        let curMouseY = 0;
+        let lastAngleX = 0;
+        let lastAngleY = 0;
+        let angleX = 0;
+        let angleY = 0;
+
+        document.addEventListener('mousedown', mouseDownHandler);
+
+        document.addEventListener('mouseup', mouseUpHandler);
+
+        function mouseDownHandler(evt) {
+          lastMouseX = evt.pageX;
+          lastMouseY = evt.pageY;
+          lastAngleX = angleX;
+          lastAngleY = angleY;
+          curMouseX = evt.pageX;
+          curMouseY = evt.pageY;
+
+          document.addEventListener('mousemove', mouseMoveHandler);
+        }
+
+        function mouseMoveHandler(evt) {
+          curMouseX = evt.pageX;
+          curMouseY = evt.pageY;
+        }
+
+        function mouseUpHandler(evt) {
+          curMouseX = evt.pageX;
+          curMouseY = evt.pageY;
+
+          document.removeEventListener('mousemove', mouseMoveHandler);
+        }
+        // 设置摄像机角度
+        function loop() {
+          angleX += (curMouseX - lastMouseX + lastAngleX - angleX) * 0.3;
+          angleY += (curMouseY - lastMouseY + lastAngleY - angleY) * 0.3;
+          angleY = Math.max(-60, Math.min(60, angleY));
+
+          // 设置摄像机视角的旋转角度
+          sprite.rotation(-angleY, angleX, 0).updateT();
+          requestAnimationFrame(loop);
+        }
+        loop();
+      }
+    </script>
+  </body>
+</html>

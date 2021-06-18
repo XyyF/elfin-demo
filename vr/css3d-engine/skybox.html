@@ -1,8 +1,9 @@
 <html>
-  <head></head>
+  <head>
+    <script src="./index.min.js"></script>
+  </head>
   <body>
     <div id="container"></div>
-    <script src="./index.min.js"></script>
     <script>
       window.onload = function initCSS3D() {
         // 创建场景
@@ -30,6 +31,9 @@
 
         // 设置页面内热点
         initHotPoint(stage);
+
+        //响应屏幕调整尺寸
+        initResize(stage);
       }
     </script>
     <script>
@@ -125,6 +129,20 @@
           });
         }
       };
+    </script>
+    <script>
+      //响应屏幕调整尺寸
+      function initResize(stage) {
+        function resize() {
+          stage.size(window.innerWidth, window.innerHeight).update();
+        }
+
+        window.onresize = function () {
+          resize();
+        };
+
+        resize();
+      }
     </script>
   </body>
 </html>
