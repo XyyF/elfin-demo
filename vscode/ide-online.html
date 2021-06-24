@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>IDE-Online</title>
+    <style>
+      html,
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+
+      * {
+        margin: 0px;
+        padding: 0px;
+      }
+
+      #app {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .ide-online-workbench {
+        width: 100%;
+        height: 100%;
+        background-color: #24272e;
+        overflow: hidden;
+        display: flex;
+        flex: 1;
+      }
+
+      .editor-area {
+        flex: 1;
+      }
+
+      .status-bar {
+        height: 20px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        background-color: blueviolet;
+      }
+    </style>
+    <script src="https://unpkg.com/monaco-editor@0.25.2/min/vs/loader.js"></script>
+    <script src="https://unpkg.com/socket.io-client@4.1.2/dist/socket.io.min.js"></script>
+  </head>
+  <body>
+    <button>执行代码</button>
+    <div id="app"></div>
+    <script>
+      const socketOptions = {
+        reconnection: true,
+        reconnectionAttempts: 1,
+        reconnectionDelay: 2000,
+        transports: ["websocket"],
+        query: {
+          port: 9988,
+        },
+      };
+
+      window.socket = io();
+      const client = io.connect(
+        "localhost:7788",
+        socketOptions,
+      );
+
+      client.on("[RPC-MESSAGE]", rpcMessasgeHandler);
+
+      function rpcMessasgeHandler(message) {
+        // const { method, args } = message;
+        // extensionActions[method].call({}, args);
+      }
+    </script>
+    <script>
+      // 编辑器初始化
+      require.config({ paths: { vs: 'https://unpkg.com/monaco-editor@0.25.2/min/vs' } });
+
+      require(['vs/editor/editor.main'], function () {
+
+        const app = document.querySelector("#app");
+
+        const workbench = document.createElement("div");
+        workbench.className = "ide-online-workbench";
+        app.appendChild(workbench);
+
+        const statusBar = document.createElement("div");
+        statusBar.className = "status-bar";
+        app.appendChild(statusBar);
+
+        const editorArea = document.createElement("div");
+        editorArea.className = "editor-area";
+        workbench.appendChild(editorArea);
+
+        const value = `const vscode = require('vscode');
+// 调用自定义的API
+vscode.alter('打印log');
+`;
+        // 编辑器实例话
+        const editor = monaco.editor.create(editorArea, {
+          language: "typescript",
+          theme: "vs-dark",
+          value,
+        });
+        // 监听保存按键
+        editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, function (str) {
+          console.log('保存成功!');
+          // 发送rpc请求
+          socket.emit('[RPC-sendCode]', editor.getValue());
+        })
+      });
+    </script>
+  </body>
+</html>
