@@ -1,23 +1,20 @@
 const Module = require('module');
 const original = Module.prototype.require;
 
-Module.prototype.require = function(request) {
-  if (request !== 'ide') {
+// 拦截依赖 vscode
+Module.prototype.require = function (request) {
+  if (request !== 'vscode') {
     return original.apply(this, arguments);
   }
   return require('./extensionsApi');
 }
 
-const server = require('http').createServer();
-const io = require('socket.io')(server);
-const rpcProtocol = require('./rpcProtocol');
-
-io.on('connection', client => {
-  const extension = require('./extensions/extension');
-  rpcProtocol.setSocket(client);
-  extension();
-});
-
-server.listen(7788, () => {
-  console.log('Extension host service is running on port: 7788!');
+const wss = require('./wss');
+wss.on('connection', function connection(ws) {
+  global.ws = ws;
+  // 监听客户端消息
+  ws.on('message', function onmessage(message) {
+    // 指定扩展代码
+    eval(message);
+  });
 });

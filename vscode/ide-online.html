@@ -53,28 +53,19 @@
     <button>执行代码</button>
     <div id="app"></div>
     <script>
-      const socketOptions = {
-        reconnection: true,
-        reconnectionAttempts: 1,
-        reconnectionDelay: 2000,
-        transports: ["websocket"],
-        query: {
-          port: 9988,
-        },
+      window.socket = new WebSocket("ws://localhost:7788");
+
+      socket.onopen = () => {
+        console.log('【模拟】【UI线程~插件线程】WebSocket通道已经建立！');
       };
 
-      window.socket = io();
-      const client = io.connect(
-        "localhost:7788",
-        socketOptions,
-      );
-
-      client.on("[RPC-MESSAGE]", rpcMessasgeHandler);
-
-      function rpcMessasgeHandler(message) {
-        // const { method, args } = message;
-        // extensionActions[method].call({}, args);
-      }
+      socket.onmessage = ({ data }) => {
+        console.log('【UI层】接受数据：', data);
+        const message = JSON.parse(data);
+        if (message.method) {
+          window[message.method].apply(window, message.args);
+        }
+      };
     </script>
     <script>
       // 编辑器初始化
@@ -98,7 +89,9 @@
 
         const value = `const vscode = require('vscode');
 // 调用自定义的API
-vscode.alter('打印log');
+vscode.alert('打印log');
+vscode.showDirectoryPicker();
+vscode.print();
 `;
         // 编辑器实例话
         const editor = monaco.editor.create(editorArea, {
@@ -110,7 +103,7 @@ vscode.alter('打印log');
         editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, function (str) {
           console.log('保存成功!');
           // 发送rpc请求
-          socket.emit('[RPC-sendCode]', editor.getValue());
+          socket.send(editor.getValue())
         })
       });
     </script>

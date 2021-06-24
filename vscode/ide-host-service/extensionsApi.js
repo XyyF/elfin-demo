@@ -1,16 +1,13 @@
-const rpcProtocol = require('./rpcProtocol');
-
-function rpcCall(name, args) {
-  if (rpcProtocol) {
-    rpcProtocol.emit('[RPC-MESSAGE]', { method: name, args });
-  }
-}
+const extensionsAPIs = ['alert', 'showDirectoryPicker']
 
 function apiFactory() {
   const handler = {
     get: (target, name) => {
       target[name] = (...args) => {
-        rpcCall(name, args);
+        if (extensionsAPIs.indexOf(name) > -1) {
+          console.log('【插件线程】调用方法: ', name);
+          ws.send(JSON.stringify({ method: name, args }));
+        }
       }
       return target[name];
     }
