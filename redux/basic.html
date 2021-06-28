@@ -1,0 +1,137 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Redux</title>
+    <style>
+      html,
+      body {
+        padding: 30px 100px;
+      }
+
+      .margintop10 {
+        margin-top: 10px;
+      }
+
+      .marginbottom30 {
+        margin-bottom: 30px;
+      }
+    </style>
+    <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
+  </head>
+  <body>
+    <div class="marginbottom30">
+      当前Store：<span id="currentReducer">counter</span>
+    </div>
+    <div class="marginbottom30">
+      Clicked: <span id="value">0</span> times
+      <button id="increment">+</button>
+      <button id="decrement">-</button>
+      <br />
+      <button id="incrementIfOdd" class="margintop10">奇数增加</button>
+      <button id="incrementAsync" class="margintop10">异步增加</button>
+      <button id="incrementExtra" class="margintop10">额外增加</button>
+    </div>
+    <div class="marginbottom30">
+      <button id="reverseStore">反转store</button>
+    </div>
+    <div class="marginbottom30">
+      详细API文档请查看：<a href="./docs.html" target="_blank">点击跳转</a>
+    </div>
+    <script>
+      const ActionTypes = {
+        Increment: 'INCREMENT',
+        Decrement: 'DECREMENT',
+      }
+      // reducer，根据action对state做出处理
+      function counter(state = 0, action) {
+        switch (action.type) {
+          case ActionTypes.Increment:
+            return state + (action.payload || 0);
+          case ActionTypes.Decrement:
+            return state - 1;
+          default:
+            return state;
+        }
+      };
+
+      // 创建store
+      var store = Redux.createStore(counter);
+
+      // 更新UI
+      var valueEl = document.getElementById('value');
+      function render() {
+        // 获取到最新state值，并更新UI
+        valueEl.innerHTML = store.getState().toString();
+      }
+      // 订阅store变化
+      store.subscribe(render);
+    </script>
+    <script>
+      // 点击事件
+      // Action工厂函数
+      function incrementAction(num) {
+        return { type: 'INCREMENT', payload: num };
+      };
+      const increment = Redux.bindActionCreators(incrementAction, store.dispatch);
+      // 点击增加
+      document.getElementById('increment')
+        .addEventListener('click', function () {
+          // 广播Actions
+          increment(1);
+        });
+      // 点击减少
+      document.getElementById('decrement')
+        .addEventListener('click', function () {
+          store.dispatch({ type: 'DECREMENT' });
+        });
+      // 奇数增加
+      document.getElementById('incrementIfOdd')
+        .addEventListener('click', function () {
+          if (store.getState() % 2 !== 0) {
+            increment(1);
+          }
+        });
+      // 异步增加
+      document.getElementById('incrementAsync')
+        .addEventListener('click', function () {
+          setTimeout(function () {
+            increment(1);
+          }, 1000);
+        });
+      // 额外量增加
+      document.getElementById('incrementExtra')
+        .addEventListener('click', function () {
+          increment(2);
+        });
+    </script>
+    <script>
+      // reverseStore
+
+      let currentReducer = 'counter';
+      // reducer
+      function reverseCounter(state = 0, action) {
+        switch (action.type) {
+          case ActionTypes.Increment:
+            return state - (action.payload || 0);
+          case ActionTypes.Decrement:
+            return state + 1;
+          default:
+            return state;
+        }
+      };
+
+      // 反转store（替换store）
+      document.getElementById('reverseStore')
+        .addEventListener('click', function () {
+          if (currentReducer === 'counter') {
+            store.replaceReducer(reverseCounter);
+            currentReducer = 'reverseCounter';
+          } else {
+            store.replaceReducer(counter);
+            currentReducer = 'counter';
+          }
+          document.getElementById('currentReducer').innerText = currentReducer;
+        });
+    </script>
+  </body>
+</html>
