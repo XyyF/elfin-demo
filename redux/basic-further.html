@@ -1,0 +1,168 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Redux</title>
+    <style>
+      html,
+      body {
+        padding: 30px 100px;
+      }
+
+      .margintop10 {
+        margin-top: 10px;
+      }
+
+      .marginbottom30 {
+        margin-bottom: 30px;
+      }
+    </style>
+    <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
+  </head>
+  <body>
+    <div class="marginbottom30">
+      通过combineReducers进行多个reducer管理，当前Store：<span id="currentReducer">counter</span>
+    </div>
+    <div class="marginbottom30">
+      计算器1: <span id="value1">0</span> times
+      <button id="increment1">+</button>
+      <button id="decrement1">-</button>
+    </div>
+    <div class="marginbottom30">
+      计算器2: <span id="value2">0</span> times
+      <button id="increment2">+</button>
+      <button id="decrement2">-</button>
+    </div>
+    <div class="marginbottom30">
+      <button id="reverseStore">反转store</button>
+    </div>
+    <div class="marginbottom30">
+      详细API文档请查看：<a href="./docs.html" target="_blank">点击跳转</a>
+    </div>
+    <script>
+      const ActionTypes = {
+        Increment1: 'INCREMENT1',
+        Decrement1: 'DECREMENT1',
+        Increment2: 'INCREMENT2',
+        Decrement2: 'DECREMENT2',
+      }
+      // reducer，根据action对state做出处理
+      function counter1(state = 0, action) {
+        switch (action.type) {
+          case ActionTypes.Increment1:
+            return state + (action.payload || 0);
+          case ActionTypes.Decrement1:
+            return state - 1;
+          default:
+            return state;
+        }
+      };
+      function counter2(state = 0, action) {
+        switch (action.type) {
+          case ActionTypes.Increment2:
+            return state + (action.payload || 0);
+          case ActionTypes.Decrement2:
+            return state - 1;
+          default:
+            return state;
+        }
+      }
+
+      // 创建store
+      var store = Redux.createStore(
+        Redux.combineReducers({counter1, counter2}),
+      );
+
+      // 更新UI
+      var valueEl = document.getElementById('value1');
+      function render1() {
+        // 获取到最新state值，并更新UI
+        valueEl.innerHTML = store.getState().counter1.toString();
+      }
+      // 订阅store变化
+      store.subscribe(render1);
+      var valueEl2 = document.getElementById('value2');
+      function render2() {
+        // 获取到最新state值，并更新UI
+        valueEl2.innerHTML = store.getState().counter2.toString();
+      }
+      // 订阅store变化
+      store.subscribe(render2);
+    </script>
+    <script>
+      // 点击事件
+      // Action工厂函数
+      function incrementAction(num) {
+        return { type: 'INCREMENT1', payload: num };
+      };
+      const increment = Redux.bindActionCreators(incrementAction, store.dispatch);
+      // 点击增加
+      document.getElementById('increment1')
+        .addEventListener('click', function () {
+          // 广播Actions
+          increment(1);
+        });
+      // 点击减少
+      document.getElementById('decrement1')
+        .addEventListener('click', function () {
+          store.dispatch({ type: 'DECREMENT1' });
+        });
+        
+      // Action工厂函数
+      function incrementAction2(num) {
+        return { type: 'INCREMENT2', payload: num };
+      };
+      const increment2 = Redux.bindActionCreators(incrementAction2, store.dispatch);
+      // 点击增加
+      document.getElementById('increment2')
+        .addEventListener('click', function () {
+          // 广播Actions
+          increment2(1);
+        });
+      // 点击减少
+      document.getElementById('decrement2')
+        .addEventListener('click', function () {
+          store.dispatch({ type: 'DECREMENT2' });
+        });
+    </script>
+    <script>
+      // reverseStore
+      let currentReducer = 'counter';
+      // reducer
+      function reverseCounter1(state = 0, action) {
+        switch (action.type) {
+          case ActionTypes.Increment1:
+            return state - (action.payload || 0);
+          case ActionTypes.Decrement1:
+            return state + 1;
+          default:
+            return state;
+        }
+      };
+      function reverseCounter2(state = 0, action) {
+        switch (action.type) {
+          case ActionTypes.Increment2:
+            return state - (action.payload || 0);
+          case ActionTypes.Decrement2:
+            return state + 1;
+          default:
+            return state;
+        }
+      };
+
+      // 反转store（替换store）
+      document.getElementById('reverseStore')
+        .addEventListener('click', function () {
+          if (currentReducer === 'counter') {
+            store.replaceReducer({counter1: reverseCounter1, counter2: reverseCounter2});
+            currentReducer = 'reverseCounter';
+          } else {
+            store.replaceReducer(
+              Redux.combineReducers({counter1, counter2})
+            );
+            currentReducer = 'counter';
+          }
+          document.getElementById('currentReducer').innerText = currentReducer;
+        });
+    </script>
+  </body>
+</html>
