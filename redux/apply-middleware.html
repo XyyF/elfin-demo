@@ -20,29 +20,39 @@
   </head>
   <body>
     <div class="marginbottom30">
-      当前Store：<span id="currentReducer">counter</span>
+      applyMiddleware应用，请打开控制台查看
     </div>
     <div class="marginbottom30">
       Clicked: <span id="value">0</span> times
       <button id="increment">+</button>
       <button id="decrement">-</button>
-      <br />
-      <button id="incrementIfOdd" class="margintop10">奇数增加</button>
-      <button id="incrementAsync" class="margintop10">异步增加</button>
-      <button id="incrementExtra" class="margintop10">额外增加</button>
-    </div>
-    <div class="marginbottom30">
-      <button id="reverseStore">反转store</button>
     </div>
     <div>
       详细API文档请查看：<a href="./docs.html" target="_blank">点击跳转</a>
     </div>
     <div class="margintop10">
-      Redux.combinReducers：<a href="./combine-reducers.html" target="_blank">点击跳转</a>
+      basic：<a href="./basic.html" target="_blank">点击跳转</a>
     </div>
     <div class="margintop10">
-      Redux.applyMiddleware：<a href="./apply-middleware.html" target="_blank">点击跳转</a>
+      Redux.combinReducers：<a href="./combine-reducers.html" target="_blank">点击跳转</a>
     </div>
+    <script>
+      // apply middleware
+      const logger1 = store => next => action => {
+        console.group(action.type);
+        console.info('logger1 dispatching', action);
+        next(action);
+        console.log('logger1 new state', store.getState());
+        console.groupEnd(action.type);
+      }
+      const logger2 = store => next => action => {
+        console.group(action.type);
+        console.info('logger2 dispatching', action);
+        next(action);
+        console.log('logger2 new state', store.getState());
+        console.groupEnd(action.type);
+      }
+    </script>
     <script>
       const ActionTypes = {
         Increment: 'INCREMENT',
@@ -50,7 +60,6 @@
       }
       // reducer，根据action对state做出处理
       function counter(state = 0, action) {
-        console.log(state, action)
         switch (action.type) {
           case ActionTypes.Increment:
             return state + (action.payload || 0);
@@ -62,7 +71,10 @@
       };
 
       // 创建store
-      var store = Redux.createStore(counter);
+      var store = Redux.createStore(
+        counter,
+        Redux.applyMiddleware(logger1, logger2),
+      );
 
       // 更新UI
       var valueEl = document.getElementById('value');
@@ -90,54 +102,6 @@
       document.getElementById('decrement')
         .addEventListener('click', function () {
           store.dispatch({ type: 'DECREMENT' });
-        });
-      // 奇数增加
-      document.getElementById('incrementIfOdd')
-        .addEventListener('click', function () {
-          if (store.getState() % 2 !== 0) {
-            increment(1);
-          }
-        });
-      // 异步增加
-      document.getElementById('incrementAsync')
-        .addEventListener('click', function () {
-          setTimeout(function () {
-            increment(1);
-          }, 1000);
-        });
-      // 额外量增加
-      document.getElementById('incrementExtra')
-        .addEventListener('click', function () {
-          increment(2);
-        });
-    </script>
-    <script>
-      // reverseStore
-
-      let currentReducer = 'counter';
-      // reducer
-      function reverseCounter(state = 0, action) {
-        switch (action.type) {
-          case ActionTypes.Increment:
-            return state - (action.payload || 0);
-          case ActionTypes.Decrement:
-            return state + 1;
-          default:
-            return state;
-        }
-      };
-
-      // 反转store（替换store）
-      document.getElementById('reverseStore')
-        .addEventListener('click', function () {
-          if (currentReducer === 'counter') {
-            store.replaceReducer(reverseCounter);
-            currentReducer = 'reverseCounter';
-          } else {
-            store.replaceReducer(counter);
-            currentReducer = 'counter';
-          }
-          document.getElementById('currentReducer').innerText = currentReducer;
         });
     </script>
   </body>

@@ -38,6 +38,12 @@
     <div class="marginbottom30">
       详细API文档请查看：<a href="./docs.html" target="_blank">点击跳转</a>
     </div>
+    <div class="margintop10">
+      basic：<a href="./basic.html" target="_blank">点击跳转</a>
+    </div>
+    <div class="margintop10">
+      Redux.applyMiddleware：<a href="./apply-middleware.html" target="_blank">点击跳转</a>
+    </div>
     <script>
       const ActionTypes = {
         Increment1: 'INCREMENT1',
@@ -153,11 +159,13 @@
       document.getElementById('reverseStore')
         .addEventListener('click', function () {
           if (currentReducer === 'counter') {
-            store.replaceReducer({counter1: reverseCounter1, counter2: reverseCounter2});
+            store.replaceReducer(
+              Redux.combineReducers({counter1: reverseCounter1, counter2: reverseCounter2}),
+            );
             currentReducer = 'reverseCounter';
           } else {
             store.replaceReducer(
-              Redux.combineReducers({counter1, counter2})
+              Redux.combineReducers({counter1, counter2}),
             );
             currentReducer = 'counter';
           }
