@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Redux</title>
+    <style>
+      html,
+      body {
+        padding: 30px 100px;
+      }
+
+      .margintop10 {
+        margin-top: 10px;
+      }
+
+      .marginbottom30 {
+        margin-bottom: 30px;
+      }
+    </style>
+    <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
+  </head>
+  <body>
+    <div class="marginbottom30">
+      compose应用，请打开控制台查看
+    </div>
+    </div>
+    <script>
+      function logger1(...args) {
+        console.log('logger1日志', ...args);
+        return 'logger1返回值';
+      }
+      function logger2(...args) {
+        console.log('logger2日志', ...args);
+        return 'logger2返回值';
+      }
+      const result = Redux.compose(logger1, logger2)(321);
+    </script>
+  </body>
+</html>

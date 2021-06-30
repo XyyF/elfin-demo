@@ -40,14 +40,14 @@
       // apply middleware
       const logger1 = store => next => action => {
         console.group(action.type);
-        console.info('logger1 dispatching', action);
+        console.log('logger1 new state', store.getState());
         next(action);
         console.log('logger1 new state', store.getState());
         console.groupEnd(action.type);
       }
       const logger2 = store => next => action => {
         console.group(action.type);
-        console.info('logger2 dispatching', action);
+        console.log('logger2 new state', store.getState());
         next(action);
         console.log('logger2 new state', store.getState());
         console.groupEnd(action.type);

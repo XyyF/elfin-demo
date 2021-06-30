@@ -1,827 +1,759 @@
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Redux</title>
-    <style>
-      /* cspell:disable-file */
-      /* webkit printing magic: print all background colors */
-      html {
-        -webkit-print-color-adjust: exact;
-      }
-
-      * {
-        box-sizing: border-box;
-        -webkit-print-color-adjust: exact;
-      }
-
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-      }
-
-      @media only screen {
-        body {
-          margin: 2em auto;
-          max-width: 900px;
-          color: rgb(55, 53, 47);
-        }
-      }
-
-      body {
-        line-height: 1.5;
-      }
-
-      a,
-      a.visited {
-        color: inherit;
-        text-decoration: underline;
-      }
-
-      .pdf-relative-link-path {
-        font-size: 80%;
-        color: #444;
-      }
-
-      h1,
-      h2,
-      h3 {
-        letter-spacing: -0.01em;
-        line-height: 1.2;
-        font-weight: 600;
-        margin-bottom: 0;
-      }
-
-      .page-title {
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-top: 0;
-        margin-bottom: 0.75em;
-      }
-
-      h1 {
-        font-size: 1.875rem;
-        margin-top: 1.875rem;
-      }
-
-      h2 {
-        font-size: 1.5rem;
-        margin-top: 1.5rem;
-      }
-
-      h3 {
-        font-size: 1.25rem;
-        margin-top: 1.25rem;
-      }
-
-      .source {
-        border: 1px solid #ddd;
-        border-radius: 3px;
-        padding: 1.5em;
-        word-break: break-all;
-      }
-
-      .callout {
-        border-radius: 3px;
-        padding: 1rem;
-      }
-
-      figure {
-        margin: 1.25em 0;
-        page-break-inside: avoid;
-      }
-
-      figcaption {
-        opacity: 0.5;
-        font-size: 85%;
-        margin-top: 0.5em;
-      }
-
-      mark {
-        background-color: transparent;
-      }
-
-      .indented {
-        padding-left: 1.5em;
-      }
-
-      hr {
-        background: transparent;
-        display: block;
-        width: 100%;
-        height: 1px;
-        visibility: visible;
-        border: none;
-        border-bottom: 1px solid rgba(55, 53, 47, 0.09);
-      }
-
-      img {
-        max-width: 100%;
-      }
-
-      @media only print {
-        img {
-          max-height: 100vh;
-          object-fit: contain;
-        }
-      }
-
-      @page {
-        margin: 1in;
-      }
-
-      .collection-content {
-        font-size: 0.875rem;
-      }
-
-      .column-list {
-        display: flex;
-        justify-content: space-between;
-      }
-
-      .column {
-        padding: 0 1em;
-      }
-
-      .column:first-child {
-        padding-left: 0;
-      }
-
-      .column:last-child {
-        padding-right: 0;
-      }
-
-      .table_of_contents-item {
-        display: block;
-        font-size: 0.875rem;
-        line-height: 1.3;
-        padding: 0.125rem;
-      }
-
-      .table_of_contents-indent-1 {
-        margin-left: 1.5rem;
-      }
-
-      .table_of_contents-indent-2 {
-        margin-left: 3rem;
-      }
-
-      .table_of_contents-indent-3 {
-        margin-left: 4.5rem;
-      }
-
-      .table_of_contents-link {
-        text-decoration: none;
-        opacity: 0.7;
-        border-bottom: 1px solid rgba(55, 53, 47, 0.18);
-      }
-
-      table,
-      th,
-      td {
-        border: 1px solid rgba(55, 53, 47, 0.09);
-        border-collapse: collapse;
-      }
-
-      table {
-        border-left: none;
-        border-right: none;
-      }
-
-      th,
-      td {
-        font-weight: normal;
-        padding: 0.25em 0.5em;
-        line-height: 1.5;
-        min-height: 1.5em;
-        text-align: left;
-      }
-
-      th {
-        color: rgba(55, 53, 47, 0.6);
-      }
-
-      ol,
-      ul {
-        margin: 0;
-        margin-block-start: 0.6em;
-        margin-block-end: 0.6em;
-      }
-
-      li>ol:first-child,
-      li>ul:first-child {
-        margin-block-start: 0.6em;
-      }
-
-      ul>li {
-        list-style: disc;
-      }
-
-      ul.to-do-list {
-        text-indent: -1.7em;
-      }
-
-      ul.to-do-list>li {
-        list-style: none;
-      }
-
-      .to-do-children-checked {
-        text-decoration: line-through;
-        opacity: 0.375;
-      }
-
-      ul.toggle>li {
-        list-style: none;
-      }
-
-      ul {
-        padding-inline-start: 1.7em;
-      }
-
-      ul>li {
-        padding-left: 0.1em;
-      }
-
-      ol {
-        padding-inline-start: 1.6em;
-      }
-
-      ol>li {
-        padding-left: 0.2em;
-      }
-
-      .mono ol {
-        padding-inline-start: 2em;
-      }
-
-      .mono ol>li {
-        text-indent: -0.4em;
-      }
-
-      .toggle {
-        padding-inline-start: 0em;
-        list-style-type: none;
-      }
-
-      /* Indent toggle children */
-      .toggle>li>details {
-        padding-left: 1.7em;
-      }
-
-      .toggle>li>details>summary {
-        margin-left: -1.1em;
-      }
-
-      .selected-value {
-        display: inline-block;
-        padding: 0 0.5em;
-        background: rgba(206, 205, 202, 0.5);
-        border-radius: 3px;
-        margin-right: 0.5em;
-        margin-top: 0.3em;
-        margin-bottom: 0.3em;
-        white-space: nowrap;
-      }
-
-      .collection-title {
-        display: inline-block;
-        margin-right: 1em;
-      }
-
-      time {
-        opacity: 0.5;
-      }
-
-      .icon {
-        display: inline-block;
-        max-width: 1.2em;
-        max-height: 1.2em;
-        text-decoration: none;
-        vertical-align: text-bottom;
-        margin-right: 0.5em;
-      }
-
-      img.icon {
-        border-radius: 3px;
-      }
-
-      .user-icon {
-        width: 1.5em;
-        height: 1.5em;
-        border-radius: 100%;
-        margin-right: 0.5rem;
-      }
-
-      .user-icon-inner {
-        font-size: 0.8em;
-      }
-
-      .text-icon {
-        border: 1px solid #000;
-        text-align: center;
-      }
-
-      .page-cover-image {
-        display: block;
-        object-fit: cover;
-        width: 100%;
-        height: 30vh;
-      }
-
-      .page-header-icon {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-      }
-
-      .page-header-icon-with-cover {
-        margin-top: -0.72em;
-        margin-left: 0.07em;
-      }
-
-      .page-header-icon img {
-        border-radius: 3px;
-      }
-
-      .link-to-page {
-        margin: 1em 0;
-        padding: 0;
-        border: none;
-        font-weight: 500;
-      }
-
-      p>.user {
-        opacity: 0.5;
-      }
-
-      td>.user,
-      td>time {
-        white-space: nowrap;
-      }
-
-      input[type="checkbox"] {
-        transform: scale(1.5);
-        margin-right: 0.6em;
-        vertical-align: middle;
-      }
-
-      p {
-        margin-top: 0.5em;
-        margin-bottom: 0.5em;
-      }
-
-      .image {
-        border: none;
-        margin: 1.5em 0;
-        padding: 0;
-        border-radius: 0;
-        text-align: center;
-      }
-
-      .code,
-      code {
-        background: rgba(135, 131, 120, 0.15);
-        border-radius: 3px;
-        padding: 0.2em 0.4em;
-        border-radius: 3px;
-        font-size: 85%;
-        tab-size: 2;
-      }
-
-      code {
-        color: #eb5757;
-      }
-
-      .code {
-        padding: 1.5em 1em;
-      }
-
-      .code-wrap {
-        white-space: pre-wrap;
-        word-break: break-all;
-      }
-
-      .code>code {
-        background: none;
-        padding: 0;
-        font-size: 100%;
-        color: inherit;
-      }
-
-      blockquote {
-        font-size: 1.25em;
-        margin: 1em 0;
-        padding-left: 1em;
-        border-left: 3px solid rgb(55, 53, 47);
-      }
-
-      .bookmark {
-        text-decoration: none;
-        max-height: 8em;
-        padding: 0;
-        display: flex;
-        width: 100%;
-        align-items: stretch;
-      }
-
-      .bookmark-title {
-        font-size: 0.85em;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        height: 1.75em;
-        white-space: nowrap;
-      }
-
-      .bookmark-text {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .bookmark-info {
-        flex: 4 1 180px;
-        padding: 12px 14px 14px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-      }
-
-      .bookmark-image {
-        width: 33%;
-        flex: 1 1 180px;
-        display: block;
-        position: relative;
-        object-fit: cover;
-        border-radius: 1px;
-      }
-
-      .bookmark-description {
-        color: rgba(55, 53, 47, 0.6);
-        font-size: 0.75em;
-        overflow: hidden;
-        max-height: 4.5em;
-        word-break: break-word;
-      }
-
-      .bookmark-href {
-        font-size: 0.75em;
-        margin-top: 0.25em;
-      }
-
-      .sans {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
-      }
-
-      .code {
-        font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-      }
-
-      .serif {
-        font-family: Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif;
-      }
-
-      .mono {
-        font-family: iawriter-mono, Nitti, Menlo, Courier, monospace;
-      }
-
-      .pdf .sans {
-        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR';
-      }
-
-      .pdf .code {
-        font-family: Source Code Pro, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR';
-      }
-
-      .pdf .serif {
-        font-family: PT Serif, Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR';
-      }
-
-      .pdf .mono {
-        font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR';
-      }
-
-      .highlight-default {}
-
-      .highlight-gray {
-        color: rgb(155, 154, 151);
-      }
-
-      .highlight-brown {
-        color: rgb(100, 71, 58);
-      }
-
-      .highlight-orange {
-        color: rgb(217, 115, 13);
-      }
-
-      .highlight-yellow {
-        color: rgb(223, 171, 1);
-      }
-
-      .highlight-teal {
-        color: rgb(15, 123, 108);
-      }
-
-      .highlight-blue {
-        color: rgb(11, 110, 153);
-      }
-
-      .highlight-purple {
-        color: rgb(105, 64, 165);
-      }
-
-      .highlight-pink {
-        color: rgb(173, 26, 114);
-      }
-
-      .highlight-red {
-        color: rgb(224, 62, 62);
-      }
-
-      .highlight-gray_background {
-        background: rgb(235, 236, 237);
-      }
-
-      .highlight-brown_background {
-        background: rgb(233, 229, 227);
-      }
-
-      .highlight-orange_background {
-        background: rgb(250, 235, 221);
-      }
-
-      .highlight-yellow_background {
-        background: rgb(251, 243, 219);
-      }
-
-      .highlight-teal_background {
-        background: rgb(221, 237, 234);
-      }
-
-      .highlight-blue_background {
-        background: rgb(221, 235, 241);
-      }
-
-      .highlight-purple_background {
-        background: rgb(234, 228, 242);
-      }
-
-      .highlight-pink_background {
-        background: rgb(244, 223, 235);
-      }
-
-      .highlight-red_background {
-        background: rgb(251, 228, 228);
-      }
-
-      .block-color-default {
-        color: inherit;
-        fill: inherit;
-      }
-
-      .block-color-gray {
-        color: rgba(55, 53, 47, 0.6);
-        fill: rgba(55, 53, 47, 0.6);
-      }
-
-      .block-color-brown {
-        color: rgb(100, 71, 58);
-        fill: rgb(100, 71, 58);
-      }
-
-      .block-color-orange {
-        color: rgb(217, 115, 13);
-        fill: rgb(217, 115, 13);
-      }
-
-      .block-color-yellow {
-        color: rgb(223, 171, 1);
-        fill: rgb(223, 171, 1);
-      }
-
-      .block-color-teal {
-        color: rgb(15, 123, 108);
-        fill: rgb(15, 123, 108);
-      }
-
-      .block-color-blue {
-        color: rgb(11, 110, 153);
-        fill: rgb(11, 110, 153);
-      }
-
-      .block-color-purple {
-        color: rgb(105, 64, 165);
-        fill: rgb(105, 64, 165);
-      }
-
-      .block-color-pink {
-        color: rgb(173, 26, 114);
-        fill: rgb(173, 26, 114);
-      }
-
-      .block-color-red {
-        color: rgb(224, 62, 62);
-        fill: rgb(224, 62, 62);
-      }
-
-      .block-color-gray_background {
-        background: rgb(235, 236, 237);
-      }
-
-      .block-color-brown_background {
-        background: rgb(233, 229, 227);
-      }
-
-      .block-color-orange_background {
-        background: rgb(250, 235, 221);
-      }
-
-      .block-color-yellow_background {
-        background: rgb(251, 243, 219);
-      }
-
-      .block-color-teal_background {
-        background: rgb(221, 237, 234);
-      }
-
-      .block-color-blue_background {
-        background: rgb(221, 235, 241);
-      }
-
-      .block-color-purple_background {
-        background: rgb(234, 228, 242);
-      }
-
-      .block-color-pink_background {
-        background: rgb(244, 223, 235);
-      }
-
-      .block-color-red_background {
-        background: rgb(251, 228, 228);
-      }
-
-      .select-value-color-default {
-        background-color: rgba(206, 205, 202, 0.5);
-      }
-
-      .select-value-color-gray {
-        background-color: rgba(155, 154, 151, 0.4);
-      }
-
-      .select-value-color-brown {
-        background-color: rgba(140, 46, 0, 0.2);
-      }
-
-      .select-value-color-orange {
-        background-color: rgba(245, 93, 0, 0.2);
-      }
-
-      .select-value-color-yellow {
-        background-color: rgba(233, 168, 0, 0.2);
-      }
-
-      .select-value-color-green {
-        background-color: rgba(0, 135, 107, 0.2);
-      }
-
-      .select-value-color-blue {
-        background-color: rgba(0, 120, 223, 0.2);
-      }
-
-      .select-value-color-purple {
-        background-color: rgba(103, 36, 222, 0.2);
-      }
-
-      .select-value-color-pink {
-        background-color: rgba(221, 0, 129, 0.2);
-      }
-
-      .select-value-color-red {
-        background-color: rgba(255, 0, 26, 0.2);
-      }
-
-      .checkbox {
-        display: inline-flex;
-        vertical-align: text-bottom;
-        width: 16;
-        height: 16;
-        background-size: 16px;
-        margin-left: 2px;
-        margin-right: 5px;
-      }
-
-      .checkbox-on {
-        background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
-      }
-
-      .checkbox-off {
-        background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
-      }
-    </style>
-    <style>
-      .margintop10 {
-        margin-top: 10px;
-      }
-    </style>
-    <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
-  </head>
-  <body>
-    <div style="margin-bottom: 30px;">
-      Clicked: <span id="value">0</span> times
-      <button id="increment">+</button>
-      <button id="decrement">-</button>
-      <br />
-      <button id="incrementIfOdd" class="margintop10">奇数增加</button>
-      <button id="incrementAsync" class="margintop10">异步增加</button>
-    </div>
-    <article id="5ac37c3f-a05f-485b-8a07-02ebe12239e4" class="page sans">
-      <header>
-        <h1 class="page-title">Redux</h1>
-      </header>
-      <div class="page-body">
-        <p id="a4250738-389c-428f-83cb-3d85e3b484e7" class="">独立的数据管理框架，不仅仅是在React中。极简的大小，仅有2KB。</p>
-        <figure id="b0767ddc-aa75-4a33-96f8-29f620b430e7" class="image"><a href="./images/Untitled.png"><img
-              style="width:336px" src="./images/Untitled.png" /></a></figure>
-        <p id="25bdc7dd-23a6-4efa-a266-eb97f178168b" class="">数据流程必定是：某个Actions → 通过Dispatch广播 → 在Reducer中返回新的State</p>
-        <p id="24297d69-8680-4ff0-810e-d541d20d09bf" class="">
-        </p>
-        <h3 id="c7a296e1-71e5-4858-b688-b3425f51db22" class="">reducer</h3>
-        <p id="a02e1fb6-ff13-4204-8bfa-c2c073903ebe" class="">如果在reducer中直接修改state，是无法监听到state变化的</p>
-        <pre id="8e63a899-9b10-42fa-8880-b70daa1a06b0" class="code"><code>/**
- * state 数据，因为第一次初始化没有action注意初始化
- * action dispatch广播的行为
- */
-function reducer(state = 0, action) {};
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Redux</title><style>
+  /* cspell:disable-file */
+  /* webkit printing magic: print all background colors */
+  html {
+    -webkit-print-color-adjust: exact;
+  }
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact;
+  }
   
-var store = Redux.createStore(reducer);</code></pre>
-        <h3 id="c6186846-8141-4217-b6f3-134c8c982e60" class="">store.subscribe</h3>
-        <p id="e9207a3e-e270-433d-b033-17c9b1f71ff6" class="">通过store进行订阅注册，当store变化时，触发回调</p>
-        <pre id="8537347f-b1de-4d98-bc73-8800ae6ef492" class="code"><code>store.subscribe(function() {});</code></pre>
-        <h3 id="0669f165-f592-4b36-9a8d-9f98a697f5f8" class="">Redux.bindActionCreators</h3>
-        <p id="caf8c3e4-5b4c-4a9d-8d84-6875b7a10eb7" class="">将Action函数和store.dispatch进行绑定后返回新的广播函数，好处是广播时无需关注store在哪儿
-        </p>
-        <pre id="4533dcab-bd65-4f27-befb-1cdcbe460f8e" class="code"><code>function incrementAction() {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  @media only screen {
+    body {
+      margin: 2em auto;
+      max-width: 900px;
+      color: rgb(55, 53, 47);
+    }
+  }
+  
+  body {
+    line-height: 1.5;
+    white-space: pre-wrap;
+  }
+  
+  a,
+  a.visited {
+    color: inherit;
+    text-decoration: underline;
+  }
+  
+  .pdf-relative-link-path {
+    font-size: 80%;
+    color: #444;
+  }
+  
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    font-weight: 600;
+    margin-bottom: 0;
+  }
+  
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 0.75em;
+  }
+  
+  h1 {
+    font-size: 1.875rem;
+    margin-top: 1.875rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+    margin-top: 1.25rem;
+  }
+  
+  .source {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 1.5em;
+    word-break: break-all;
+  }
+  
+  .callout {
+    border-radius: 3px;
+    padding: 1rem;
+  }
+  
+  figure {
+    margin: 1.25em 0;
+    page-break-inside: avoid;
+  }
+  
+  figcaption {
+    opacity: 0.5;
+    font-size: 85%;
+    margin-top: 0.5em;
+  }
+  
+  mark {
+    background-color: transparent;
+  }
+  
+  .indented {
+    padding-left: 1.5em;
+  }
+  
+  hr {
+    background: transparent;
+    display: block;
+    width: 100%;
+    height: 1px;
+    visibility: visible;
+    border: none;
+    border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+  }
+  
+  img {
+    max-width: 100%;
+  }
+  
+  @media only print {
+    img {
+      max-height: 100vh;
+      object-fit: contain;
+    }
+  }
+  
+  @page {
+    margin: 1in;
+  }
+  
+  .collection-content {
+    font-size: 0.875rem;
+  }
+  
+  .column-list {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .column {
+    padding: 0 1em;
+  }
+  
+  .column:first-child {
+    padding-left: 0;
+  }
+  
+  .column:last-child {
+    padding-right: 0;
+  }
+  
+  .table_of_contents-item {
+    display: block;
+    font-size: 0.875rem;
+    line-height: 1.3;
+    padding: 0.125rem;
+  }
+  
+  .table_of_contents-indent-1 {
+    margin-left: 1.5rem;
+  }
+  
+  .table_of_contents-indent-2 {
+    margin-left: 3rem;
+  }
+  
+  .table_of_contents-indent-3 {
+    margin-left: 4.5rem;
+  }
+  
+  .table_of_contents-link {
+    text-decoration: none;
+    opacity: 0.7;
+    border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+  }
+  
+  table,
+  th,
+  td {
+    border: 1px solid rgba(55, 53, 47, 0.09);
+    border-collapse: collapse;
+  }
+  
+  table {
+    border-left: none;
+    border-right: none;
+  }
+  
+  th,
+  td {
+    font-weight: normal;
+    padding: 0.25em 0.5em;
+    line-height: 1.5;
+    min-height: 1.5em;
+    text-align: left;
+  }
+  
+  th {
+    color: rgba(55, 53, 47, 0.6);
+  }
+  
+  ol,
+  ul {
+    margin: 0;
+    margin-block-start: 0.6em;
+    margin-block-end: 0.6em;
+  }
+  
+  li > ol:first-child,
+  li > ul:first-child {
+    margin-block-start: 0.6em;
+  }
+  
+  ul > li {
+    list-style: disc;
+  }
+  
+  ul.to-do-list {
+    text-indent: -1.7em;
+  }
+  
+  ul.to-do-list > li {
+    list-style: none;
+  }
+  
+  .to-do-children-checked {
+    text-decoration: line-through;
+    opacity: 0.375;
+  }
+  
+  ul.toggle > li {
+    list-style: none;
+  }
+  
+  ul {
+    padding-inline-start: 1.7em;
+  }
+  
+  ul > li {
+    padding-left: 0.1em;
+  }
+  
+  ol {
+    padding-inline-start: 1.6em;
+  }
+  
+  ol > li {
+    padding-left: 0.2em;
+  }
+  
+  .mono ol {
+    padding-inline-start: 2em;
+  }
+  
+  .mono ol > li {
+    text-indent: -0.4em;
+  }
+  
+  .toggle {
+    padding-inline-start: 0em;
+    list-style-type: none;
+  }
+  
+  /* Indent toggle children */
+  .toggle > li > details {
+    padding-left: 1.7em;
+  }
+  
+  .toggle > li > details > summary {
+    margin-left: -1.1em;
+  }
+  
+  .selected-value {
+    display: inline-block;
+    padding: 0 0.5em;
+    background: rgba(206, 205, 202, 0.5);
+    border-radius: 3px;
+    margin-right: 0.5em;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+    white-space: nowrap;
+  }
+  
+  .collection-title {
+    display: inline-block;
+    margin-right: 1em;
+  }
+  
+  time {
+    opacity: 0.5;
+  }
+  
+  .icon {
+    display: inline-block;
+    max-width: 1.2em;
+    max-height: 1.2em;
+    text-decoration: none;
+    vertical-align: text-bottom;
+    margin-right: 0.5em;
+  }
+  
+  img.icon {
+    border-radius: 3px;
+  }
+  
+  .user-icon {
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 100%;
+    margin-right: 0.5rem;
+  }
+  
+  .user-icon-inner {
+    font-size: 0.8em;
+  }
+  
+  .text-icon {
+    border: 1px solid #000;
+    text-align: center;
+  }
+  
+  .page-cover-image {
+    display: block;
+    object-fit: cover;
+    width: 100%;
+    height: 30vh;
+  }
+  
+  .page-header-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .page-header-icon-with-cover {
+    margin-top: -0.72em;
+    margin-left: 0.07em;
+  }
+  
+  .page-header-icon img {
+    border-radius: 3px;
+  }
+  
+  .link-to-page {
+    margin: 1em 0;
+    padding: 0;
+    border: none;
+    font-weight: 500;
+  }
+  
+  p > .user {
+    opacity: 0.5;
+  }
+  
+  td > .user,
+  td > time {
+    white-space: nowrap;
+  }
+  
+  input[type="checkbox"] {
+    transform: scale(1.5);
+    margin-right: 0.6em;
+    vertical-align: middle;
+  }
+  
+  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+  
+  .image {
+    border: none;
+    margin: 1.5em 0;
+    padding: 0;
+    border-radius: 0;
+    text-align: center;
+  }
+  
+  .code,
+  code {
+    background: rgba(135, 131, 120, 0.15);
+    border-radius: 3px;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-size: 85%;
+    tab-size: 2;
+  }
+  
+  code {
+    color: #eb5757;
+  }
+  
+  .code {
+    padding: 1.5em 1em;
+  }
+  
+  .code-wrap {
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  
+  .code > code {
+    background: none;
+    padding: 0;
+    font-size: 100%;
+    color: inherit;
+  }
+  
+  blockquote {
+    font-size: 1.25em;
+    margin: 1em 0;
+    padding-left: 1em;
+    border-left: 3px solid rgb(55, 53, 47);
+  }
+  
+  .bookmark {
+    text-decoration: none;
+    max-height: 8em;
+    padding: 0;
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+  }
+  
+  .bookmark-title {
+    font-size: 0.85em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 1.75em;
+    white-space: nowrap;
+  }
+  
+  .bookmark-text {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .bookmark-info {
+    flex: 4 1 180px;
+    padding: 12px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .bookmark-image {
+    width: 33%;
+    flex: 1 1 180px;
+    display: block;
+    position: relative;
+    object-fit: cover;
+    border-radius: 1px;
+  }
+  
+  .bookmark-description {
+    color: rgba(55, 53, 47, 0.6);
+    font-size: 0.75em;
+    overflow: hidden;
+    max-height: 4.5em;
+    word-break: break-word;
+  }
+  
+  .bookmark-href {
+    font-size: 0.75em;
+    margin-top: 0.25em;
+  }
+  
+  .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+  .code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+  .serif { font-family: Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif; }
+  .mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+  .pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+  
+  .pdf .code { font-family: Source Code Pro, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+  
+  .pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+  
+  .pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+  
+  .highlight-default {
+  }
+  .highlight-gray {
+    color: rgb(155,154,151);
+  }
+  .highlight-brown {
+    color: rgb(100,71,58);
+  }
+  .highlight-orange {
+    color: rgb(217,115,13);
+  }
+  .highlight-yellow {
+    color: rgb(223,171,1);
+  }
+  .highlight-teal {
+    color: rgb(15,123,108);
+  }
+  .highlight-blue {
+    color: rgb(11,110,153);
+  }
+  .highlight-purple {
+    color: rgb(105,64,165);
+  }
+  .highlight-pink {
+    color: rgb(173,26,114);
+  }
+  .highlight-red {
+    color: rgb(224,62,62);
+  }
+  .highlight-gray_background {
+    background: rgb(235,236,237);
+  }
+  .highlight-brown_background {
+    background: rgb(233,229,227);
+  }
+  .highlight-orange_background {
+    background: rgb(250,235,221);
+  }
+  .highlight-yellow_background {
+    background: rgb(251,243,219);
+  }
+  .highlight-teal_background {
+    background: rgb(221,237,234);
+  }
+  .highlight-blue_background {
+    background: rgb(221,235,241);
+  }
+  .highlight-purple_background {
+    background: rgb(234,228,242);
+  }
+  .highlight-pink_background {
+    background: rgb(244,223,235);
+  }
+  .highlight-red_background {
+    background: rgb(251,228,228);
+  }
+  .block-color-default {
+    color: inherit;
+    fill: inherit;
+  }
+  .block-color-gray {
+    color: rgba(55, 53, 47, 0.6);
+    fill: rgba(55, 53, 47, 0.6);
+  }
+  .block-color-brown {
+    color: rgb(100,71,58);
+    fill: rgb(100,71,58);
+  }
+  .block-color-orange {
+    color: rgb(217,115,13);
+    fill: rgb(217,115,13);
+  }
+  .block-color-yellow {
+    color: rgb(223,171,1);
+    fill: rgb(223,171,1);
+  }
+  .block-color-teal {
+    color: rgb(15,123,108);
+    fill: rgb(15,123,108);
+  }
+  .block-color-blue {
+    color: rgb(11,110,153);
+    fill: rgb(11,110,153);
+  }
+  .block-color-purple {
+    color: rgb(105,64,165);
+    fill: rgb(105,64,165);
+  }
+  .block-color-pink {
+    color: rgb(173,26,114);
+    fill: rgb(173,26,114);
+  }
+  .block-color-red {
+    color: rgb(224,62,62);
+    fill: rgb(224,62,62);
+  }
+  .block-color-gray_background {
+    background: rgb(235,236,237);
+  }
+  .block-color-brown_background {
+    background: rgb(233,229,227);
+  }
+  .block-color-orange_background {
+    background: rgb(250,235,221);
+  }
+  .block-color-yellow_background {
+    background: rgb(251,243,219);
+  }
+  .block-color-teal_background {
+    background: rgb(221,237,234);
+  }
+  .block-color-blue_background {
+    background: rgb(221,235,241);
+  }
+  .block-color-purple_background {
+    background: rgb(234,228,242);
+  }
+  .block-color-pink_background {
+    background: rgb(244,223,235);
+  }
+  .block-color-red_background {
+    background: rgb(251,228,228);
+  }
+  .select-value-color-default { background-color: rgba(206,205,202,0.5); }
+  .select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+  .select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+  .select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+  .select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+  .select-value-color-green { background-color: rgba(0,135,107,0.2); }
+  .select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+  .select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+  .select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+  .select-value-color-red { background-color: rgba(255,0,26,0.2); }
+  
+  .checkbox {
+    display: inline-flex;
+    vertical-align: text-bottom;
+    width: 16;
+    height: 16;
+    background-size: 16px;
+    margin-left: 2px;
+    margin-right: 5px;
+  }
+  
+  .checkbox-on {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+  }
+  
+  .checkbox-off {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+  }
+    
+  </style></head><body><article id="5ac37c3f-a05f-485b-8a07-02ebe12239e4" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📁</span></div><h1 class="page-title">Redux</h1></header><div class="page-body"><nav id="1f30fade-76dc-494b-9b91-5eca13ed6910" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#c7a296e1-71e5-4858-b688-b3425f51db22">概念介绍</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#21c98551-5f40-4f15-84d6-1679b5d7f89b">Action</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#956819e2-8518-435f-a230-62db1df604c8">reducer</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#c6186846-8141-4217-b6f3-134c8c982e60">Store</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#a6cf9f21-d2ea-4266-9f9a-245353dc2ea8">store.getState</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#d5c7d03a-797e-4e77-b967-ecfac03845cb">store.dispatch</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#2019de9e-0f19-4f74-814f-b70f6304604e">store.subscribe</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#0e66dcb0-e884-47ad-91a4-2d252f0d1de6">store.replaceReducer</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#800d3f0f-a989-425f-b7e3-c333c115645f">核心API</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#a0b24780-b127-4145-9db6-4548ee0d887c">Rudex.createStore</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#0669f165-f592-4b36-9a8d-9f98a697f5f8">Redux.bindActionCreators</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#f4f23726-a552-4f23-a48c-c546cd766b9d">Redux.combineReducers</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#99bf0212-bcec-48b0-a87b-1d579f882d5f">Rudex.applyMiddleware</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3ded0397-82ad-401d-9293-5d6d8daba99f">Rudex.compose</a></div></nav><p id="a4250738-389c-428f-83cb-3d85e3b484e7" class="">独立的数据管理框架，不仅仅是在React中。极简的大小，压缩后不到1KB。</p><figure id="b0767ddc-aa75-4a33-96f8-29f620b430e7" class="image"><a href="images/Untitled.png"><img style="width:336px" src="images/Untitled.png"/></a></figure><p id="25bdc7dd-23a6-4efa-a266-eb97f178168b" class="">数据流程必定是：某个Actions → 通过Dispatch广播 → 在Reducer中返回新的State</p><p id="24297d69-8680-4ff0-810e-d541d20d09bf" class="">
+  </p><h2 id="c7a296e1-71e5-4858-b688-b3425f51db22" class="">概念介绍</h2><h3 id="21c98551-5f40-4f15-84d6-1679b5d7f89b" class="">Action</h3><p id="e58fbc1d-47f2-453a-845d-a59de55120b0" class="">一个对象，可以理解为交互行为的抽象，包含着行为类型，以及携带的数据；整个数据更新的起始点就是Action的产生，决定了state如何改变；</p><ol id="3382ae4d-f28a-4630-bcdd-f3e70894fe34" class="numbered-list" start="1"><li>在Action对象中，除了type是硬性要求字段，</li></ol><pre id="614dcaa7-eedf-4107-827b-42862e880c2e" class="code"><code>{
+    type: &#x27;&#x27;, // 交互行为
+    payload: {}, // 携带数据
+    test: 1, // 自定义字段
+  }</code></pre><p id="4d8a79ec-1fe1-4ece-b3b6-a19bd8941435" class="">Action因为单个比较零散，可以通过工厂函数的模式创建Action；</p><h3 id="956819e2-8518-435f-a230-62db1df604c8" class="">reducer</h3><p id="a02e1fb6-ff13-4204-8bfa-c2c073903ebe" class="">控制着state的函数，在函数内部根据不同的action返回全新的state，如果在reducer中直接修改state，是无效的</p><ol id="089e397a-63c6-4399-978a-4f2d12456f2e" class="numbered-list" start="1"><li>state的初始化</li></ol><ol id="ace0f33f-c361-4ac3-aa38-f6ba5108b8db" class="numbered-list" start="2"><li>不同action对应的state状态</li></ol><pre id="8e63a899-9b10-42fa-8880-b70daa1a06b0" class="code"><code>/**
+   * state 数据，因为第一次初始化没有action注意初始化
+   * action dispatch广播的行为
+   */
+  function reducer(state = 0, action) {};
+  
+  var store = Redux.createStore(reducer);</code></pre><h2 id="c6186846-8141-4217-b6f3-134c8c982e60" class="">Store</h2><p id="4f4d7135-be4e-4f4b-b801-98bcbd01ae1f" class="">作为面向开发者需求的接口，主要负责state全局状态的管理；</p><h3 id="a6cf9f21-d2ea-4266-9f9a-245353dc2ea8" class="">store.getState</h3><p id="388ddef1-5e19-489b-8f32-722da2092260" class="">获取当前状态下的state值，真实的state通过闭包保存，无法直接获取；</p><pre id="56d7cb45-3b92-4579-966a-551721d88f0f" class="code"><code>store.getState();</code></pre><h3 id="d5c7d03a-797e-4e77-b967-ecfac03845cb" class="">store.dispatch</h3><p id="07a0f047-5503-48ff-bd72-15ff8e31e631" class="">在redux中广播Action行为，因为一个store可能对应着多个redux（参考combineReducers），这里就是通过广播触发reducer更新state；</p><ol id="746a8e7e-e486-4f88-80b0-343b70ab406b" class="numbered-list" start="1"><li>触发更新state；</li></ol><ol id="c253a64a-3d93-42a6-991e-1d1a64bae6bb" class="numbered-list" start="2"><li>触发监听器执行；</li></ol><pre id="5f5c34bb-212a-4901-8c9f-e200d00bbcd8" class="code"><code>store.dispatch({type: &#x27;&#x27;, payload: 0});</code></pre><h3 id="2019de9e-0f19-4f74-814f-b70f6304604e" class="">store.subscribe</h3><p id="e9207a3e-e270-433d-b033-17c9b1f71ff6" class="">通过store进行订阅注册，当store变化时，触发回调，多数用来进行UI同步；</p><ol id="6915bdf8-040a-4b8a-a112-4257c7578a77" class="numbered-list" start="1"><li>内部维护一个监听器队列；</li></ol><ol id="cee88aee-6f8c-4d38-884f-43dfd9ff4d82" class="numbered-list" start="2"><li>返回一个注销监听的方法；</li></ol><pre id="8537347f-b1de-4d98-bc73-8800ae6ef492" class="code"><code>const unsubscribe = store.subscribe(function() {});</code></pre><h3 id="0e66dcb0-e884-47ad-91a4-2d252f0d1de6" class="">store.replaceReducer</h3><p id="e20d55a6-e916-464d-810a-d915fd9531e3" class="">替换当前的reducer，因为在reducer中是返回全新的state，所以替换reducer十分方便；</p><pre id="7a1d0b84-3bcb-41d7-a724-3cc34a4252e0" class="code"><code>store.replaceReducer(newReducer);</code></pre><h2 id="800d3f0f-a989-425f-b7e3-c333c115645f" class="">核心API</h2><h3 id="a0b24780-b127-4145-9db6-4548ee0d887c" class="">Rudex.createStore</h3><p id="e53a1eb5-8bd3-4dc3-bcd4-d2d61916fea1" class="">接受一个reducer函数，返回一个store的方法；在创建store的同时，会初始化state，对应的Action为 ActionTyps.INIT（有加盐，防止重复）；</p><pre id="22d25d09-eaf8-44b6-b1a2-ed7cb40f3695" class="code"><code>const randomString = () =&gt;
+    Math.random().toString(36).substring(7).split(&#x27;&#x27;).join(&#x27;.&#x27;)
+  
+  const ActionTypes = {
+    INIT: `@@redux/INIT${/* #__PURE__ */ randomString()}`,
+  }</code></pre><h3 id="0669f165-f592-4b36-9a8d-9f98a697f5f8" class="">Redux.bindActionCreators</h3><p id="caf8c3e4-5b4c-4a9d-8d84-6875b7a10eb7" class="">将Action函数和store.dispatch进行绑定后返回新的广播函数，好处是广播时无需关注store在哪儿</p><pre id="4533dcab-bd65-4f27-befb-1cdcbe460f8e" class="code"><code>function incrementAction() {
     return { type: &#x27;INCREMENT&#x27; };
-};
-const increment = Redux.bindActionCreators(incrementAction, store.dispatch);</code></pre>
-        <h3 id="f4f23726-a552-4f23-a48c-c546cd766b9d" class="">Redux.combineReducers</h3>
-        <p id="dd5315d5-38fc-482d-a247-d42ee48bd4a5" class="">组件多个reducer为一个store</p>
-        <pre id="bd3beae7-d480-47f9-a8cd-dae577dcbf4e" class="code"><code>function todoer(state = []) { return state };
+  };
+  const increment = Redux.bindActionCreators(incrementAction, store.dispatch);</code></pre><h3 id="f4f23726-a552-4f23-a48c-c546cd766b9d" class="">Redux.combineReducers</h3><p id="dd5315d5-38fc-482d-a247-d42ee48bd4a5" class="">在大型应用的redux应用中，会将state拆分为不同namespace作用域下的状态，<del>但应用只能有一个store</del>，即createStore方法只能调用一次，所以需要将多个不同的reducer为一个store</p><pre id="bd3beae7-d480-47f9-a8cd-dae577dcbf4e" class="code"><code>function todoer(state = []) { return state };
   
-// { counter: 0, todoer: [] }
-Redux.createStore(
-  Redux.combineReducers(counter, todoer)
-);</code></pre>
-      </div>
-    </article>
-    <script>
-      // reducer，根据action对state做出处理
-      function counter(state = 0, action) {
-        switch (action.type) {
-          case 'INCREMENT':
-            return state + 1;
-          case 'DECREMENT':
-            return state - 1;
-          default:
-            return state;
+  // { counter: 0, todoer: [] }
+  Redux.createStore(
+    Redux.combineReducers({counter, todoer})
+  );
+  
+  store.replaceReducer(
+    Redux.combineReducers({counter, todoer})
+  );</code></pre><h3 id="99bf0212-bcec-48b0-a87b-1d579f882d5f" class="">Rudex.applyMiddleware</h3><p id="14ace8b2-ec41-40a2-a6bb-386fa78d7e81" class="">Rudex中的中间件概念，通过改造 dispatch，让我们能在dispatch前后进行一些自定义的操作；（如日志）</p><pre id="e97139e9-fde1-4e7e-8bb8-a2919653a72b" class="code"><code>function applyMiddleware(...middlewares) {
+    return function(createStore) {
+      return function(reducer, payloadedState) {
+        const store = createStore(reducer, preloadedState);
+        // 在applyMiddleware中不允许通过store调用dispatch
+        let dispatch: Dispatch = () =&gt; {
+          throw new Error(
+            &#x27;Dispatching while constructing your middleware is not allowed. &#x27; +
+              &#x27;Other middleware would not be applied to this dispatch.&#x27;
+          )
+        };
+  
+        // 第一函数参数，用以获取当前state状态
+        const middlewareAPI: MiddlewareAPI = {
+          getState: store.getState,
+          dispatch: (action, ...args) =&gt; dispatch(action, ...args),
+        };
+        const chain = middlewares.map(middleware =&gt; middleware(middlewareAPI));
+        // 第二函数参数，同时返回改造后的dispatch
+        dispatch = compose(...chain)(store.dispatch);
+        // ...
+        return {
+          ...store,
+          dispath, // 改造后的 dispatch
         }
-      };
-
-      // 创建store
-      var store = Redux.createStore(counter);
-
-      // 更新UI
-      var valueEl = document.getElementById('value');
-      function render() {
-        valueEl.innerHTML = store.getState().toString();
       }
-      // 订阅store变化
-      store.subscribe(render);
-
-      // 点击事件
-      function incrementAction() {
-        return { type: 'INCREMENT' };
-      };
-      const increment = Redux.bindActionCreators(incrementAction, store.dispatch);
-      document.getElementById('increment')
-        .addEventListener('click', function () {
-          // 广播Actions
-          increment();
-        });
-      document.getElementById('decrement')
-        .addEventListener('click', function () {
-          store.dispatch({ type: 'DECREMENT' });
-        });
-      document.getElementById('incrementIfOdd')
-        .addEventListener('click', function () {
-          if (store.getState() % 2 !== 0) {
-            increment();
-          }
-        });
-      document.getElementById('incrementAsync')
-        .addEventListener('click', function () {
-          setTimeout(function () {
-            increment();
-          }, 1000);
-        });
-    </script>
-  </body>
-</html>
+    }
+  }</code></pre><p id="cecfac63-95ee-402e-acc2-db561276e830" class="">中间件研发</p><pre id="1a6407f1-676f-455e-bcb7-c1e012202955" class="code"><code>// 研发者角度
+  const logger1 = store =&gt; next =&gt; action =&gt; {
+    console.group(action.type);
+    console.info(&#x27;logger1 dispatching&#x27;, action);
+    next(action);
+    console.log(&#x27;logger1 new state&#x27;, store.getState());
+    console.groupEnd(action.type);
+  }
+  
+  // 使用者角度
+  var store = Redux.createStore(
+    counter,
+    Redux.applyMiddleware(logger1),
+  );</code></pre><p id="e4cb981c-cf84-43ef-b39a-a672e8c4b0e1" class="">实例分析</p><pre id="4aefa6aa-895b-4aa6-915c-5c3c8f8621c7" class="code"><code>applyMiddleware(log1, log2, log3, log4, ...);
+  
+  // 经过该步骤后，chain的值为 (next) =&gt; {....}
+  const chain = middlewares.map(middleware =&gt; middleware(middlewareAPI));
+  
+  // 经过该步骤后
+  compose(...chain);
+  // ==&gt;
+  function() {
+    return function() {
+      return function() {
+        // ...
+        return f1(f2());
+      }(fnn-1());
+    }(fnn());
+  };
+  
+  // 经过该步骤后
+  // 1. fnn最先执行，它的参数是 dispatch！
+  // 2. fnn-1之后执行，它们的参数是 (action) =&gt; {} ，即是fnn的执行返回值！
+  // 3. fn1是最后执行，也就是最终的返回值是fn1！
+  compose(...chain)(store.dispatch);
+  
+  // 最终执行dispatch
+  // 1. fn1最先执行，接受参数action
+  // 2. fn1在执行next前，state是旧数据
+  // 3. fn1执行next时，直接执行fn2，如此如果没有中断，那么就是 fn1 -&gt; fn2 -&gt; fn3 -&gt; ... fnn -&gt; dispatch -&gt; 更新数据
+  // 4. 执行真正的dispatch后，将从fnn优先执行，此时已经是新数据
+  // 总结: fn1(next前) -&gt; fn2(next前) -&gt; ... -&gt; fn(next前) -&gt; dispatch -&gt; fn(next后) -&gt; ... -&gt; fn2(next后) -&gt; fn1(next后)
+  store.dispatch(action);</code></pre><h3 id="3ded0397-82ad-401d-9293-5d6d8daba99f" class="">Rudex.compose</h3><p id="2a175ed3-7b57-4c16-bee8-d2828a690382" class="">工具类函数，接受一串函数，将他们以嵌套形式返回，最终是返回一个全新的函数，将会<mark class="highlight-yellow">倒叙执行</mark>所有的函数；</p><pre id="3bf5ad67-f987-4575-ac00-d0bdec577595" class="code"><code>function compose(...funcs: Function[]) {
+    if (funcs.length === 0) {
+      // infer the argument type so it is usable in inference down the line
+      return &lt;T&gt;(arg: T) =&gt; arg
+    }
+  
+    if (funcs.length === 1) {
+      return funcs[0]
+    }
+  
+    return funcs.reduce(
+      (a, b) =&gt;
+        (...args: any) =&gt;
+          a(b(...args))
+    )
+  }</code></pre><p id="1b394947-581f-4298-90b2-462f6dbb94f8" class="">案例分析</p><pre id="8de7c87d-bbe9-416f-ab96-127f102eb209" class="code"><code>compose(fn1, fn2, fn3, fn4);
+  
+  // ==&gt;
+  function() {
+    return f1(f2());
+  };
+  // ==&gt;
+  function() {
+    return function() {
+      return f1(f2());
+    }(f3());
+  };
+  // ==&gt;
+  function() {
+    return function() {
+      function() {
+        f1(f2());
+      }(f3());
+    }(f4());
+  };</code></pre></div></article></body></html>
