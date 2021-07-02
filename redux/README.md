@@ -6,3 +6,4 @@
 - [basic基础功能](https://rengarxiao.com/elfin-demo/redux/basic.html)
 - [combineReducers](https://rengarxiao.com/elfin-demo/redux/combine-reducers.html)
 - [applyMiddleware](https://rengarxiao.com/elfin-demo/redux/apply-middleware.html)
+- [compose](https://rengarxiao.com/elfin-demo/redux/apply-middleware.html)
