@@ -1,9 +1,9 @@
 <!doctype html>
 <html>
-  <head>
+  <head lang="en">
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Home</title>
+    <title>elfinDemo</title>
     <meta name="description" content="elfin demo">
     <meta name="keywords" content="elfin demo rengarxiao XyyF" />
     <meta name="author" content="rengarxiao" />
@@ -18,12 +18,12 @@
         height: 100%;
       }
 
-      header {
+      .header {
         width: 100%;
         height: 100%;
       }
 
-      header .header__bg {
+      .header .header__bg {
         width: 100%;
         height: 100%;
         background-position: center;
@@ -31,24 +31,18 @@
         display: table;
       }
 
-      header .hero-bg {
+      .header .hero-bg {
         display: table-cell;
         vertical-align: middle;
-      }
-
-      header .container {
         padding-right: 15px;
         padding-left: 15px;
         margin-right: auto;
         margin-left: auto;
-      }
-
-      header .text-center {
         text-align: center;
         color: #fff;
       }
 
-      header a {
+      .header a {
         display: inline-block;
         font-size: 13px;
         letter-spacing: 1px;
@@ -59,21 +53,104 @@
         text-decoration: none;
         line-height: 1;
       }
+
+      .body {
+        max-width: 80rem;
+        padding: 1rem;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .body_card {
+        width: 18rem;
+        margin: 0.5rem;
+        position: relative;
+        display: flex;
+        flex-shrink: 0;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 1px solid rgba(0, 0, 0, .125);
+        border-radius: .25rem;
+      }
+
+      .card-body {
+        flex: 1 1 auto;
+        min-height: 1px;
+        padding: 1.25rem;
+      }
+
+      .card-title {
+        margin-top: 0;
+        margin-bottom: .75rem;
+        font-size: 1.25rem;
+      }
+
+      .card-text {
+        margin-top: 0;
+        margin-bottom: 1rem;
+      }
+
+      .card-link {
+        color: rgb(51, 162, 255);
+        text-decoration-color: initial;
+        background-color: transparent;
+        text-decoration: none;
+      }
+
+      .card-link+.card-link {
+        margin-left: 1.25rem;
+      }
     </style>
     <script src="https://rengarxiao.com/elfin-utils/packages/footer-link/index.js"></script>
   </head>
   <body>
-    <header>
+    <header class="header">
       <div class="header__bg" style="background-image: url(assets/images/hero-bg-02.jpg);">
         <div class="hero-bg">
-          <div class="container">
-            <div class="text-center">
-              <h1>Welcome To elfin demo.</h1>
-              <a href="https://github.com/XyyF/" target="_blank">contact me</a>
-            </div>
-          </div>
+          <h1>Welcome To elfin demo.</h1>
+          <a href="https://github.com/XyyF/" target="_blank">contact me</a>
         </div>
       </div>
     </header>
+    <div class="body">
+      <div class="body_card">
+        <div class="card-body">
+          <h5 class="card-title">redux</h5>
+          <p class="card-text">redux demo & docs.</p>
+          <a href="./redux/basic.html" class="card-link">basic</a>
+          <a href="./redux/docs.html" class="card-link">docs</a>
+        </div>
+      </div>
+
+      <div class="body_card">
+        <div class="card-body">
+          <h5 class="card-title">vr</h5>
+          <p class="card-text">css3d-engine.</p>
+          <a href="./vr/css3d-engine/skybox.html" class="card-link">skybox</a>
+          <a href="./vr/css3d-engine/README.md" class="card-link">README.md</a>
+        </div>
+      </div>
+
+      <div class="body_card">
+        <div class="card-body">
+          <h5 class="card-title">vscode</h5>
+          <p class="card-text">vscode demo.</p>
+          <a href="./vscode/README.md" class="card-link">README.md</a>
+        </div>
+      </div>
+
+      <div class="body_card">
+        <div class="card-body">
+          <h5 class="card-title">shareQQ</h5>
+          <p class="card-text">shareQQ demo.</p>
+          <a href="./mobile/shareQQ/index.html" class="card-link">demo</a>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
