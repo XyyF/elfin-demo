@@ -53,104 +53,147 @@
         text-decoration: none;
         line-height: 1;
       }
-
-      .body {
-        max-width: 80rem;
-        padding: 1rem;
-        margin: 0 auto;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      .body_card {
-        width: 18rem;
-        margin: 0.5rem;
-        position: relative;
-        display: flex;
-        flex-shrink: 0;
-        flex-direction: column;
-        min-width: 0;
-        word-wrap: break-word;
-        background-color: #fff;
-        background-clip: border-box;
-        border: 1px solid rgba(0, 0, 0, .125);
-        border-radius: .25rem;
-      }
-
-      .card-body {
-        flex: 1 1 auto;
-        min-height: 1px;
-        padding: 1.25rem;
-      }
-
-      .card-title {
-        margin-top: 0;
-        margin-bottom: .75rem;
-        font-size: 1.25rem;
-      }
-
-      .card-text {
-        margin-top: 0;
-        margin-bottom: 1rem;
-      }
-
-      .card-link {
-        color: rgb(51, 162, 255);
-        text-decoration-color: initial;
-        background-color: transparent;
-        text-decoration: none;
-      }
-
-      .card-link+.card-link {
-        margin-left: 1.25rem;
-      }
     </style>
     <script src="https://rengarxiao.com/elfin-utils/packages/footer-link/index.js"></script>
   </head>
   <body>
     <header class="header">
-      <div class="header__bg" style="background-image: url(assets/images/hero-bg-02.jpg);">
+      <div class="header__bg" style="background-image: url(images/bg.jpg);">
         <div class="hero-bg">
           <h1>Welcome To elfin demo.</h1>
           <a href="https://github.com/XyyF/" target="_blank">contact me</a>
         </div>
       </div>
     </header>
-    <div class="body">
-      <div class="body_card">
-        <div class="card-body">
-          <h5 class="card-title">redux</h5>
-          <p class="card-text">redux demo & docs.</p>
-          <a href="./redux/basic.html" class="card-link">basic</a>
-          <a href="./redux/docs.html" class="card-link">docs</a>
-        </div>
-      </div>
+    <div id="body"></div>
+    <script>
+      window.addEventListener('load', () => {
+        const cards = [
+          {
+            title: 'redux',
+            text: 'redux demo & docs.',
+            links: [
+              { text: 'basic', href: './redux/basic.html' },
+              { text: 'docs', href: './redux/docs.html' },
+            ],
+          },
+          {
+            title: 'vr',
+            text: 'css3d-engine.',
+            links: [
+              { text: 'skybox', href: './vr/css3d-engine/skybox.html' },
+              { text: 'README.md', href: './vr/css3d-engine/README.md' },
+            ],
+          },
+          {
+            title: 'vscode',
+            text: 'vscode demo.',
+            links: [
+              { text: 'README.md', href: './vscode/README.md' },
+            ],
+          },
+          {
+            title: 'shareQQ',
+            text: 'shareQQ demo.',
+            links: [
+              { text: 'demo', href: './mobile/shareQQ/index.html' },
+            ],
+          },
+        ];
 
-      <div class="body_card">
-        <div class="card-body">
-          <h5 class="card-title">vr</h5>
-          <p class="card-text">css3d-engine.</p>
-          <a href="./vr/css3d-engine/skybox.html" class="card-link">skybox</a>
-          <a href="./vr/css3d-engine/README.md" class="card-link">README.md</a>
-        </div>
-      </div>
+        const body = document.querySelector('#body');
+        for (let i = 0, l = cards.length; i < l; i++) {
+          const card = cards[i];
+          const cardWrap = document.createElement('div');
+          cardWrap.className = 'body_card';
 
-      <div class="body_card">
-        <div class="card-body">
-          <h5 class="card-title">vscode</h5>
-          <p class="card-text">vscode demo.</p>
-          <a href="./vscode/README.md" class="card-link">README.md</a>
-        </div>
-      </div>
+          const cardBody = document.createElement('div');
+          cardBody.className = 'card-body';
 
-      <div class="body_card">
-        <div class="card-body">
-          <h5 class="card-title">shareQQ</h5>
-          <p class="card-text">shareQQ demo.</p>
-          <a href="./mobile/shareQQ/index.html" class="card-link">demo</a>
-        </div>
-      </div>
-    </div>
+          const title = document.createElement('h5');
+          title.className = 'card-title';
+          title.innerText = card.title;
+          cardBody.appendChild(title);
+
+          const text = document.createElement('p');
+          text.className = 'card-text';
+          text.innerText = card.text;
+          cardBody.appendChild(text);
+
+          if (card.links) {
+            for (let ii = 0, ll = card.links.length; ii < ll; ii++) {
+              const link = card.links[ii];
+              const a = document.createElement('a');
+              a.className = 'card-link';
+              a.innerText = link.text;
+              a.href = link.href;
+              cardBody.appendChild(a);
+            }
+          }
+          
+          cardWrap.appendChild(cardBody);
+          body.appendChild(cardWrap);
+        }
+      });
+
+      addStyle();
+      function addStyle() {
+        const style = document.createElement('style');
+        style.innerHTML = `
+          #body {
+            max-width: 80rem;
+            padding: 1rem;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+          }
+
+          #body .body_card {
+            width: 18rem;
+            margin: 0.5rem;
+            position: relative;
+            display: flex;
+            flex-shrink: 0;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 1px solid rgba(0, 0, 0, .125);
+            border-radius: .25rem;
+          }
+
+          #body .card-body {
+            flex: 1 1 auto;
+            min-height: 1px;
+            padding: 1.25rem;
+          }
+
+          #body .card-title {
+            margin-top: 0;
+            margin-bottom: .75rem;
+            font-size: 1.25rem;
+          }
+
+          #body .card-text {
+            margin-top: 0;
+            margin-bottom: 1rem;
+          }
+
+          #body .card-link {
+            color: rgb(51, 162, 255);
+            text-decoration-color: initial;
+            background-color: transparent;
+            text-decoration: none;
+          }
+
+          #body .card-link+.card-link {
+            margin-left: 1.25rem;
+          }
+        `;
+        document.head.appendChild(style);
+      };
+    </script>
   </body>
 </html>
