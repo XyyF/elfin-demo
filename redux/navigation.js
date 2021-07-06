@@ -8,11 +8,12 @@
       { title: 'Redux.compose', links: './compose.html' },
     ];
     const wrapper = document.createElement('div');
+    wrapper.style.margin = '10px 0 20px';
 
     for (let i = 0, l = navigations.length; i < l; i++) {
       const navi = navigations[i];
       const div = document.createElement('div');
-      div.style.marginTop = '10px';
+      div.style.paddingTop = '10px';
       div.innerText = navi.title + '：';
       
       const a = document.createElement('a');
