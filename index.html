@@ -10,28 +10,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
       html,
-      body {
+      body,
+      p,
+      h1 {
         margin: 0;
         padding: 0;
         border: 0;
+      }
+
+      html,
+      body {
         width: 100%;
         height: 100%;
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
       }
 
       .header {
         width: 100%;
-        height: 100%;
-      }
-
-      .header .header__bg {
-        width: 100%;
-        height: 100%;
+        padding-top: 60px;
+        padding-bottom: 70px;
         background-position: center;
         background-size: cover;
         display: table;
+        background-image: url(./images/bg.jpg);
       }
 
-      .header .hero-bg {
+      .header .header__wrapper {
         display: table-cell;
         vertical-align: middle;
         padding-right: 15px;
@@ -42,7 +46,15 @@
         color: #fff;
       }
 
-      .header a {
+      .header .header__wrapper .desc {
+        padding-top: 15px;
+        text-align: center;
+        font-size: 24px;
+        letter-spacing: 0.01em;
+        font-weight: 200;
+      }
+
+      .header .header__wrapper a {
         display: inline-block;
         font-size: 13px;
         letter-spacing: 1px;
@@ -52,17 +64,17 @@
         padding: 20px;
         text-decoration: none;
         line-height: 1;
+        margin-top: 40px;
       }
     </style>
     <script src="https://rengarxiao.com/elfin-utils/packages/footer-link/index.js"></script>
   </head>
   <body>
     <header class="header">
-      <div class="header__bg" style="background-image: url(images/bg.jpg);">
-        <div class="hero-bg">
-          <h1>Welcome To elfin demo.</h1>
-          <a href="https://github.com/XyyF/" target="_blank">contact me</a>
-        </div>
+      <div class="header__wrapper">
+        <h1>elfin demo</h1>
+        <p class="desc">elfin系列构建的demo示例库.</p>
+        <a href="https://github.com/XyyF/" target="_blank">contact me</a>
       </div>
     </header>
     <div id="body"></div>
@@ -71,34 +83,36 @@
         const cards = [
           {
             title: 'redux',
-            text: 'redux demo & docs.',
+            text: '基于redux研究的简单demo，以及记录redux使用文档及其源码分析',
             links: [
-              { text: 'basic', href: './redux/basic.html' },
-              { text: 'docs', href: './redux/docs.html' },
+              { text: '基础使用', href: './redux/basic.html' },
+              { text: '文档', href: './redux/docs.html' },
             ],
           },
           {
-            title: 'vr',
-            text: 'css3d-engine.',
+            title: 'css3d-engine vr',
+            text: '使用css3d-engine搭建的vr场景，旨在了解css3d-engine实际效果.',
             links: [
-              { text: 'skybox', href: './vr/css3d-engine/skybox.html' },
-              { text: 'README.md', href: './vr/css3d-engine/README.md' },
+              { text: '3d场景', href: './vr/css3d-engine/skybox.html' },
+              { text: '魔方', href: './vr/css3d-engine/sprite.html' },
+              { text: 'README.md', href: 'https://github.com/XyyF/elfin-demo/tree/main/vr/css3d-engine' },
             ],
           },
           {
-            title: 'vscode',
-            text: 'vscode demo.',
+            title: 'vscode扩展',
+            text: '探究vscode扩展运行原理的简易demo，需要在本地启动服务配合使用.',
             links: [
-              { text: 'README.md', href: './vscode/README.md' },
+              { text: '编辑器界面', href: './vscode/ide-online.html' },
+              { text: 'README.md', href: 'https://github.com/XyyF/elfin-demo/tree/main/vscode' },
             ],
           },
-          {
-            title: 'shareQQ',
-            text: 'shareQQ demo.',
-            links: [
-              { text: 'demo', href: './mobile/shareQQ/index.html' },
-            ],
-          },
+          // {
+          //   title: 'shareQQ',
+          //   text: 'shareQQ demo.',
+          //   links: [
+          //     { text: 'demo', href: './mobile/shareQQ/index.html' },
+          //   ],
+          // },
         ];
 
         const body = document.querySelector('#body');
@@ -127,10 +141,11 @@
               a.className = 'card-link';
               a.innerText = link.text;
               a.href = link.href;
+              a.target = '_blank';
               cardBody.appendChild(a);
             }
           }
-          
+
           cardWrap.appendChild(cardBody);
           body.appendChild(cardWrap);
         }
