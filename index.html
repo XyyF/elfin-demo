@@ -95,7 +95,7 @@
             links: [
               { text: '3d场景', href: './css3d-engine-vr/skybox.html' },
               { text: '魔方', href: './css3d-engine-vr/sprite.html' },
-              { text: 'README.md', href: 'https://github.com/XyyF/elfin-demo/tree/main/vr/css3d-engine' },
+              { text: 'README.md', href: 'https://rengarxiao.com/elfin-demo/css3d-engine-vr' },
             ],
           },
           {
@@ -103,16 +103,21 @@
             text: '探究vscode扩展运行原理的简易demo，需要在本地启动服务配合使用.',
             links: [
               { text: '编辑器界面', href: './vscode/ide-online.html' },
-              { text: 'README.md', href: 'https://github.com/XyyF/elfin-demo/tree/main/vscode' },
+              { text: 'README.md', href: 'https://rengarxiao.com/elfin-demo/vscode' },
             ],
           },
-          // {
-          //   title: 'shareQQ',
-          //   text: 'shareQQ demo.',
-          //   links: [
-          //     { text: 'demo', href: './mobile/shareQQ/index.html' },
-          //   ],
-          // },
+          {
+            title: 'watermark 前端水印',
+            text: '分析一些纯前端水印的实现、对抗方式.',
+            links: [
+              { text: 'div实现', href: 'https://rengarxiao.com/elfin-utils/packages/watermark/elfin-demo/element.html' },
+              { text: 'background实现', href: 'https://rengarxiao.com/elfin-utils/packages/watermark/elfin-demo/background.html' },
+              {
+                text: 'README.md', href: 'https://rengarxiao.com/elfin-utils/packages/watermark/',
+                style: { marginLeft: 0, marginTop: '10px' }
+              },
+            ],
+          },
         ];
 
         const body = document.querySelector('#body');
@@ -142,6 +147,13 @@
               a.innerText = link.text;
               a.href = link.href;
               a.target = '_blank';
+              if (link.style) {
+                for (let key in link.style) {
+                  if (link.style.hasOwnProperty(key)) {
+                    a.style[key] = link.style[key];
+                  }
+                }
+              }
               cardBody.appendChild(a);
             }
           }
@@ -201,6 +213,7 @@
             text-decoration-color: initial;
             background-color: transparent;
             text-decoration: none;
+            display: inline-block;
           }
 
           #body .card-link+.card-link {
