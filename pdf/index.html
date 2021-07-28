@@ -1,0 +1,311 @@
+<!doctype html>
+<html>
+  <head lang="en">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>elfinDemo</title>
+    <meta name="description" content="elfin demo">
+    <meta name="keywords" content="elfin demo rengarxiao XyyF" />
+    <meta name="author" content="rengarxiao" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      html,
+      body,
+      p,
+      h1 {
+        margin: 0;
+        padding: 0;
+        border: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+      }
+
+      h2 {
+        padding-top: 12px;
+        font-size: 24px;
+        border-top: 1px solid #ececec
+      }
+    </style>
+    <style>
+      .markdown-body {
+        word-break: break-word;
+        line-height: 1.75;
+        font-weight: 400;
+        font-size: 15px;
+        overflow-x: hidden;
+        color: #333
+      }
+
+      .markdown-body h1,
+      .markdown-body h2,
+      .markdown-body h3,
+      .markdown-body h4,
+      .markdown-body h5,
+      .markdown-body h6 {
+        line-height: 1.5;
+        margin-top: 35px;
+        margin-bottom: 10px;
+        padding-bottom: 5px
+      }
+
+      .markdown-body h1 {
+        font-size: 30px;
+        margin-bottom: 5px
+      }
+
+      .markdown-body h2 {
+        padding-bottom: 12px;
+        font-size: 24px;
+        border-bottom: 1px solid #ececec
+      }
+
+      .markdown-body h3 {
+        font-size: 18px;
+        padding-bottom: 0
+      }
+
+      .markdown-body h4 {
+        font-size: 16px
+      }
+
+      .markdown-body h5 {
+        font-size: 15px
+      }
+
+      .markdown-body h6 {
+        margin-top: 5px
+      }
+
+      .markdown-body p {
+        line-height: inherit;
+        margin-top: 22px;
+        margin-bottom: 22px
+      }
+
+      .markdown-body img {
+        max-width: 100%
+      }
+
+      .markdown-body hr {
+        border: none;
+        border-top: 1px solid #ddd;
+        margin-top: 32px;
+        margin-bottom: 32px
+      }
+
+      .markdown-body code {
+        word-break: break-word;
+        border-radius: 2px;
+        overflow-x: auto;
+        background-color: #fff5f5;
+        color: #ff502c;
+        font-size: .87em;
+        padding: .065em .4em
+      }
+
+      .markdown-body code,
+      .markdown-body pre {
+        font-family: Menlo, Monaco, Consolas, Courier New, monospace
+      }
+
+      .markdown-body pre {
+        overflow: auto;
+        position: relative;
+        line-height: 1.75
+      }
+
+      .markdown-body pre>code {
+        font-size: 12px;
+        padding: 15px 12px;
+        margin: 0;
+        word-break: normal;
+        display: block;
+        overflow-x: auto;
+        color: #333;
+        background: #f8f8f8
+      }
+
+      .markdown-body a {
+        text-decoration: none;
+        color: #0269c8;
+        border-bottom: 1px solid #d1e9ff
+      }
+
+      .markdown-body a:active,
+      .markdown-body a:hover {
+        color: #275b8c
+      }
+
+      .markdown-body table {
+        display: inline-block !important;
+        font-size: 12px;
+        width: auto;
+        max-width: 100%;
+        overflow: auto;
+        border: 1px solid #f6f6f6
+      }
+
+      .markdown-body thead {
+        background: #f6f6f6;
+        color: #000;
+        text-align: left
+      }
+
+      .markdown-body tr:nth-child(2n) {
+        background-color: #fcfcfc
+      }
+
+      .markdown-body td,
+      .markdown-body th {
+        padding: 12px 7px;
+        line-height: 24px
+      }
+
+      .markdown-body td {
+        min-width: 120px
+      }
+
+      .markdown-body blockquote {
+        color: #666;
+        padding: 1px 23px;
+        margin: 22px 0;
+        border-left: 4px solid #cbcbcb;
+        background-color: #f8f8f8
+      }
+
+      .markdown-body blockquote:after {
+        display: block;
+        content: ""
+      }
+
+      .markdown-body blockquote>p {
+        margin: 10px 0
+      }
+
+      .markdown-body ol,
+      .markdown-body ul {
+        padding-left: 28px
+      }
+
+      .markdown-body ol li,
+      .markdown-body ul li {
+        margin-bottom: 0;
+        list-style: inherit
+      }
+
+      .markdown-body ol li .task-list-item,
+      .markdown-body ul li .task-list-item {
+        list-style: none
+      }
+
+      .markdown-body ol li .task-list-item ol,
+      .markdown-body ol li .task-list-item ul,
+      .markdown-body ul li .task-list-item ol,
+      .markdown-body ul li .task-list-item ul {
+        margin-top: 0
+      }
+
+      .markdown-body ol ol,
+      .markdown-body ol ul,
+      .markdown-body ul ol,
+      .markdown-body ul ul {
+        margin-top: 3px
+      }
+
+      .markdown-body ol li {
+        padding-left: 6px
+      }
+
+      .markdown-body .contains-task-list {
+        padding-left: 0
+      }
+
+      .markdown-body .task-list-item {
+        list-style: none
+      }
+
+      @media (max-width:720px) {
+        .markdown-body h1 {
+          font-size: 24px
+        }
+
+        .markdown-body h2 {
+          font-size: 20px
+        }
+
+        .markdown-body h3 {
+          font-size: 18px
+        }
+      }
+    </style>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://unpkg.com/jspdf@2.3.1/dist/jspdf.umd.min.js"></script>
+  </head>
+  <body>
+    <div id="body">
+      <button class="click_download">点击下载</button>
+      <div>
+        <h2>文本展示：</h2>
+        <div class="markdown-body">
+          <style class="darkreader darkreader--sync" media="screen"></style>
+          <p>在接触微信开发者平台过程中，耳边时常环绕着几个词：AppID、OpenID，以及UnionID；在一路的慢慢摸索后，记录下我的理解，希望对以后有所帮助。</p>
+          <h3 data-id="heading-0">AppID</h3>
+          <p>
+            在微信开放平台(open.weixin.qq.com)，为一系列应用提供了接口，来帮助开发者开发，但这些接口并不能随便调用，至少需要AppID，以及其对应的AppSecret来获取使用权限，类似于账号密码，那这些信息从哪里获得呢？
+          </p>
+          <p>在公众平台(mp.weixin.qq.com)中，如 "微信公众号"(下方都以公众号为例)，有着其唯一的AppID和AppSecret，可以后台中查看，这样开发者们就有途径去使用开放平台提供的各种接口；</p>
+          <p>总结一句话就是：每一个公众平台的应用，都对应着唯一的AppID。那什么是OpenID呢？</p>
+          <h3 data-id="heading-1">OpenID</h3>
+          <p>对于公众平台应用的开发者和运营者，最想关心的一件事，就是 "谁在使用？"
+            简单的方式是直接使用用户的微信名/微信号，但这明显是不合理的，万一数据库被攻破用户隐私怎么办、用户修改后同步等等问题，为了规避这样的风险，所以需要另外的符号来标识用户；</p>
+          <p>
+            因此，OpenID诞生了，微信开放平台会给每个公众号下的用户都生成一个OpenID，其值是固定且唯一的，它让用户信息以更加安全的方式进入了大家的视野；但是有一点是需要区分的，不同公众号下的相同用户，其OpenID是不同的，他们的数据是不互通的，这样会稍显奇怪；
+          </p>
+          <p>如上所说，OpenID也是存在缺陷的，那么什么场景下OpenID的能力会凸显不足呢？</p>
+          <h3 data-id="heading-2">UnionID</h3>
+          <p>假想自己是资深的开发者，自己名下许多不同的公众号，某一天你想对你名下应用的所有用户进行分析，但是不同公众号的用户数据相互隔离，如果仅仅依靠OpenID，你很难完成这件事；</p>
+          <p>所以微信后续引入了UnionID的概念，简单理解为同一开发者名下所有公众号中，相同用户的UnionID是一致的，这样就解决了这个问题，可以通过UnionID连接用户；</p>
+          <p>但是并不推荐仅仅使用UnionID标记用户，因为UnionID是和开发者相关，如果更换开发者的话，那么你将遇到大麻烦。</p>
+        </div>
+      </div>
+      <div>
+        <h2>图片展示：</h2>
+        <div>
+          <img src="https://avatars.githubusercontent.com/u/29220339?v=4" alt="XyyF" width="200"></img>
+          <img src="https://rengarxiao.com/XyyF/images/elfin.png" alt="elfin" width="200" />
+        </div>
+      </div>
+    </div>
+    <script>
+      window.addEventListener('load', () => {
+        document.querySelector('.click_download').addEventListener('click', () => {
+          const HTML_Width = document.body.clientWidth;
+          const HTML_Height = document.body.clientHeight;
+          const top_left_margin = 15;
+          const PDF_Width = HTML_Width + (top_left_margin * 2);
+          const PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
+          html2canvas(document.querySelector('#body'), { useCORS: true }).then(canvas => {
+            // document.body.appendChild(canvas);
+            // TODO: 分页、canvas图表、gif图片、webwork
+            // https://mk.woa.com/note/2396?ADTAG=rbntf
+            canvas.getContext('2d');
+            var imgData = canvas.toDataURL("image/jpeg,1.0");
+            var pdf = new jspdf.jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
+            pdf.addImage(imgData, 'JPEG', top_left_margin, top_left_margin, HTML_Width, HTML_Height);
+            pdf.save("HTML-Document.pdf");
+          });
+        })
+      });
+    </script>
+  </body>
+</html>

@@ -25,6 +25,11 @@
         font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
       }
 
+      body {
+        display: flex;
+        flex-direction: column;
+      }
+
       .header {
         width: 100%;
         padding-top: 60px;
@@ -120,10 +125,17 @@
           },
           {
             title: 'footer link',
-            text: 'elfin统一页脚管理模式，.',
+            text: 'elfin统一页脚管理模式.',
             links: [
               { text: '基础实现', href: 'https://rengarxiao.com/elfin-utils/packages/footer-link/elfin-demo/index.html' },
               { text: 'absolute实现', href: 'https://rengarxiao.com/elfin-utils/packages/footer-link/elfin-demo/absolute.html' },
+            ],
+          },
+          {
+            title: 'webworker pdf',
+            text: '使用webworker协助将页面生成pdf',
+            links: [
+              { text: '基础实现', href: './pdf/index.html' },
             ],
           },
         ];
@@ -179,6 +191,7 @@
             max-width: 80rem;
             padding: 1rem;
             margin: 0 auto;
+            flex: 1;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
