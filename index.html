@@ -83,6 +83,26 @@
       </div>
     </header>
     <div id="body"></div>
+    <script id="card_tpl" type="text/html">
+      <% if (cards.length > 0) { %>
+        <% for (let i = 0, l = cards.length; i < l; i++) { %>
+          <div class="body_card">
+            <div class="card-body">
+              <h5 class="card-title"><%= cards[i].title %></h5>
+              <p class="card-text"><%= cards[i].text %></p>
+              <% if (cards[i].links && cards[i].links.length > 0) { %>
+                <% for (let ii = 0, ll = cards[i].links.length; ii < ll; ii++) { %>
+                  <a class="card-link" href="<%= cards[i].links[ii].href %>" target="_blank">
+                    <%= cards[i].links[ii].text %>
+                  </a>
+                <% } %>
+              <% } %>  
+            </div>
+          </div>
+        <% } %>
+      <% } %>
+    </script>
+    <script src="https://rengar-1253859411.file.myqcloud.com/libs/elfinTpl/1.0.0/index.min.js"></script>
     <script>
       window.addEventListener('load', () => {
         const cards = [
@@ -140,54 +160,17 @@
           },
           {
             title: 'elfin tpl',
-            text: '低代码、高效率的前端html模板解析引擎',
+            text: '低代码、高效率的前端html模板解析引擎（当前页面正在使用中...',
             links: [
               { text: 'demo', href: 'https://rengarxiao.com/elfin-utils/packages/html-template/elfin-demo/index.html' },
             ],
           },
         ];
 
-        const body = document.querySelector('#body');
-        for (let i = 0, l = cards.length; i < l; i++) {
-          const card = cards[i];
-          const cardWrap = document.createElement('div');
-          cardWrap.className = 'body_card';
-
-          const cardBody = document.createElement('div');
-          cardBody.className = 'card-body';
-
-          const title = document.createElement('h5');
-          title.className = 'card-title';
-          title.innerText = card.title;
-          cardBody.appendChild(title);
-
-          const text = document.createElement('p');
-          text.className = 'card-text';
-          text.innerText = card.text;
-          cardBody.appendChild(text);
-
-          if (card.links) {
-            for (let ii = 0, ll = card.links.length; ii < ll; ii++) {
-              const link = card.links[ii];
-              const a = document.createElement('a');
-              a.className = 'card-link';
-              a.innerText = link.text;
-              a.href = link.href;
-              a.target = '_blank';
-              if (link.style) {
-                for (let key in link.style) {
-                  if (link.style.hasOwnProperty(key)) {
-                    a.style[key] = link.style[key];
-                  }
-                }
-              }
-              cardBody.appendChild(a);
-            }
-          }
-
-          cardWrap.appendChild(cardBody);
-          body.appendChild(cardWrap);
-        }
+        document.querySelector('#body').innerHTML = elfinTpl(
+          document.querySelector('#card_tpl').innerHTML,
+          { cards },
+        );
       });
 
       addStyle();
@@ -222,7 +205,7 @@
           #body .card-body {
             flex: 1 1 auto;
             min-height: 1px;
-            padding: 1.25rem;
+            padding: 1.25rem 1.25rem 0.25rem;
           }
 
           #body .card-title {
@@ -244,8 +227,9 @@
             display: inline-block;
           }
 
-          #body .card-link+.card-link {
-            margin-left: 1.25rem;
+          #body .card-link {
+            margin-right: 1.25rem;
+            margin-bottom: 1rem;
           }
         `;
         document.head.appendChild(style);
