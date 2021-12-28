@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>css_weight</title>
+    <meta name="description" content="elfin demo shareQQ">
+    <meta name="keywords" content="elfin demo shareQQ rengarxiao XyyF" />
+    <meta name="author" content="rengarxiao" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      html {
+        font-size: 20px;
+      }
+
+      pre {
+        overflow: auto;
+        position: relative;
+        margin: 0;
+      }
+
+      pre>code {
+        color: rgb(200, 195, 188);
+        background-color: rgb(28, 30, 31);
+        font-size: 16px;
+        padding: 15px 4px;
+        margin: 0;
+        word-break: normal;
+        display: block;
+        overflow-x: auto;
+      }
+
+      .module1 .important { color: red !important; }
+
+      .module1 #id { color: pink; }
+
+      .module1 .class { color: blue; }
+
+      .module1 div { color: green; }
+    </style>
+    <style>
+      .module2 .mixin {
+        color: red;
+      }
+
+      .module2 .mixin {
+        color: blue
+      }
+    </style>
+  </head>
+  <body>
+    <pre>
+      <code>
+        .module1 .important { color: red !important; }
+
+        .module1 #id { color: pink; }
+  
+        .module1 .class { color: blue; }
+  
+        .module1 div { color: green; }
+      </code>
+    </pre>
+    <div>单权重(由高到低)===></div>
+    <div class="module1">
+      <div style="color: black;" class="important">!important > inline</div>
+      <div id="id" style="color: black;">inline > #id</div>
+      <div class="class" id="id">#id > .class</div>
+      <div class="class">.class > div</div>
+      <div>div</div>
+    </div>
+    <pre>
+      <code>
+        .module1 .important { color: red !important; }
+
+        .module1 #id { color: pink; }
+  
+        .module1 .class { color: blue; }
+  
+        .module1 div { color: green; }
+      </code>
+    </pre>
+    <div>混合权重==></div>
+    <div class="module2">
+      <div id="id">#id > .module2 .class</div>
+      <div class="class">.module2 .class > .class</div>
+    </div>
+  </body>
+</html>
